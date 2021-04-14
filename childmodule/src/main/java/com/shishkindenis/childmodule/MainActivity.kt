@@ -1,4 +1,4 @@
-package com.shishkindenis.locationtracker_kotlin
+package com.shishkindenis.childmodule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
