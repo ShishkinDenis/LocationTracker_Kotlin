@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 
 class FirebaseUserSingleton @Inject constructor() {
-//class FirebaseUserSingleton  constructor() {
+    //class FirebaseUserSingleton  constructor() {
     private val auth = FirebaseAuth.getInstance()
     private var userId: String? = null
 

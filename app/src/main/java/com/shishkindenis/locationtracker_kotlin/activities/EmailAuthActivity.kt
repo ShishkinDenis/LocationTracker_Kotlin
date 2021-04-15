@@ -1,22 +1,22 @@
 package com.shishkindenis.locationtracker_kotlin.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.shishkindenis.locationtracker_kotlin.R
 import com.shishkindenis.locationtracker_kotlin.databinding.ActivityEmailAuthBinding
 import com.shishkindenis.locationtracker_kotlin.viewModel.EmailAuthViewModel
 
 class EmailAuthActivity : AppCompatActivity() {
 
-//    firebaseUserSingleton!!.getFirebaseAuth()!! убрать
-    val emailAuthViewModel : EmailAuthViewModel by viewModels()
+    val emailAuthViewModel: EmailAuthViewModel by viewModels()
     private var binding: ActivityEmailAuthBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        MyApplication.appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityEmailAuthBinding.inflate(layoutInflater)
 //        !!знаки
@@ -37,21 +37,32 @@ class EmailAuthActivity : AppCompatActivity() {
                 setErrorIfInvalid()
             }
         }
+        emailAuthViewModel.toast.observe(this, Observer {
+            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+        })
+        emailAuthViewModel.toastwithEmail.observe(this, Observer {
+            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+        })
+        emailAuthViewModel.startCalendarActivity.observe(this, Observer {
+            goToChooseModuleActivity()
+        })
     }
 
-//ИЛИ SendLocationActivity
-//    override fun goToCalendarActivity() {
-//        val intent = Intent(this, CalendarActivity::class.java)
-//        finish()
-//        startActivity(intent)
+    fun goToChooseModuleActivity() {
+        val intent = Intent(this, ChooseModuleActivity::class.java)
+        finish()
+        startActivity(intent)
+    }
+
+
+//TODO DELETE
+
+//    fun showToastWithEmail(toastMessage: String?) {
+//        Toast.makeText(
+//            applicationContext, toastMessage,
+//            Toast.LENGTH_LONG
+//        ).show()
 //    }
-
-    fun showToastWithEmail(toastMessage: String?) {
-        Toast.makeText(
-            applicationContext, toastMessage,
-            Toast.LENGTH_LONG
-        ).show()
-    }
 
     fun emailIsValid(): Boolean {
         return binding?.etEmail?.text.toString().isNotEmpty()
@@ -72,8 +83,8 @@ class EmailAuthActivity : AppCompatActivity() {
 
     fun logInIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
-        emailAuthViewModel?.signIn(
-         binding!!.etEmail.text.toString(),
+        emailAuthViewModel.signIn(
+            binding!!.etEmail.text.toString(),
             binding!!.etPassword.text.toString()
         )
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
@@ -81,10 +92,12 @@ class EmailAuthActivity : AppCompatActivity() {
 
     fun registerIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
-        emailAuthViewModel?.createAccount(
-           binding!!.etEmail.text.toString(),
+        emailAuthViewModel.createAccount(
+            binding!!.etEmail.text.toString(),
             binding!!.etPassword.text.toString()
         )
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
     }
+
+
 }

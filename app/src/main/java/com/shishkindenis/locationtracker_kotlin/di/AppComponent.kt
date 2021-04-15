@@ -18,7 +18,7 @@ interface AppComponent {
 
     fun inject(mainActivity: MainActivity?)
 
-//    fun inject(mapActivity: MapActivity?)
+    //    fun inject(mapActivity: MapActivity?)
 //
 //    fun inject(calendarActivity: CalendarActivity?)
 //

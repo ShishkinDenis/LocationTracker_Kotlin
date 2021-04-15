@@ -1,22 +1,27 @@
 package com.shishkindenis.locationtracker_kotlin.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import com.shishkindenis.locationtracker_kotlin.R
 import com.shishkindenis.locationtracker_kotlin.databinding.ActivityPhoneAuthBinding
 import com.shishkindenis.locationtracker_kotlin.viewModel.PhoneAuthViewModel
+import java.util.concurrent.TimeUnit
 
 class PhoneAuthActivity : AppCompatActivity() {
 
-    val phoneAuthViewModel : PhoneAuthViewModel by viewModels()
+    val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
     private var binding: ActivityPhoneAuthBinding? = null
-//    РЕГИСТРАЦИЯ В Firebase
-//    private val auth = FirebaseAuth.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        MyApplication.appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityPhoneAuthBinding.inflate(layoutInflater)
         //        !!знаки
@@ -26,7 +31,7 @@ class PhoneAuthActivity : AppCompatActivity() {
         binding!!.btnRequestCode.setOnClickListener {
             binding!!.pbPhoneAuth.visibility = View.VISIBLE
             if (phoneNumberIsValid()) {
-//                startPhoneNumberVerification(binding!!.etPhoneNumber.text.toString())
+                startPhoneNumberVerification(binding!!.etPhoneNumber.text.toString())
             } else {
                 setErrorIfInvalid()
             }
@@ -36,40 +41,53 @@ class PhoneAuthActivity : AppCompatActivity() {
             binding!!.pbPhoneAuth.visibility = View.VISIBLE
             if (codeIsValid()) {
                 phoneAuthViewModel.verifyPhoneNumberWithCode(
-              binding!!.etVerificationCode.text.toString())
+                    binding!!.etVerificationCode.text.toString()
+                )
             } else {
                 setErrorIfInvalid()
             }
             binding!!.pbPhoneAuth.visibility = View.INVISIBLE
         }
+
         phoneAuthViewModel.phoneVerificationCallback()
+        phoneAuthViewModel.toast.observe(this, Observer {
+            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+        })
+        phoneAuthViewModel.startCalendarActivity.observe(this, Observer {
+            goToChooseModuleActivity()
+        })
+        phoneAuthViewModel.verifyButton.observe(this, Observer {
+            enableVerifyButton()
+        })
+        phoneAuthViewModel.phoneNumberError.observe(this, Observer {
+            showInvalidPhoneNumberError()
+        })
     }
 
-    //ИЛИ SendLocationActivity
-//    fun goToCalendarActivity() {
-//        val intent = Intent(this, CalendarActivity::class.java)
-//        finish()
-//        startActivity(intent)
-//    }
+    fun goToChooseModuleActivity() {
+        val intent = Intent(this, ChooseModuleActivity::class.java)
+        finish()
+        startActivity(intent)
+    }
 
-//    private fun startPhoneNumberVerification(phoneNumber: String) {
-////        val options = PhoneAuthOptions.newBuilder(firebaseUserSingleton!!.getFirebaseAuth()!!)
-//        val options = PhoneAuthOptions.newBuilder(auth)
-//            .setPhoneNumber(phoneNumber)
-//            .setTimeout(60L, TimeUnit.SECONDS)
-//            .setActivity(this)
-////            .setCallbacks(phoneAuthPresenter!!.phoneVerificationCallback(firebaseUserSingleton!!.getFirebaseAuth())!!)
-//            .setCallbacks(phoneAuthViewModel.phoneVerificationCallback())
-//            .build()
-//        PhoneAuthProvider.verifyPhoneNumber(options)
-//    }
+    private fun startPhoneNumberVerification(phoneNumber: String) {
+//        val options = PhoneAuthOptions.newBuilder(firebaseUserSingleton!!.getFirebaseAuth()!!)
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+//            .setCallbacks(phoneAuthPresenter!!.phoneVerificationCallback(firebaseUserSingleton!!.getFirebaseAuth())!!)
+            .setCallbacks(phoneAuthViewModel.phoneVerificationCallback())
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
 
     fun phoneNumberIsValid(): Boolean {
-        return !binding!!.etPhoneNumber.text.toString().isEmpty()
+        return binding?.etPhoneNumber?.text.toString().isNotEmpty()
     }
 
     fun codeIsValid(): Boolean {
-        return !binding!!.etVerificationCode.text.toString().isEmpty()
+        return binding?.etVerificationCode?.text.toString().isNotEmpty()
     }
 
     fun enableVerifyButton() {
