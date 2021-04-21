@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationTracker_Kotlin">
-        <activity android:name=".StartParentActivity"></activity>
-        <activity android:name=".MapActivity" />
-        <activity android:name=".CalendarActivity" />
-        <activity android:name=".MainParentActivity">
+        <activity android:name=".activities.StartParentActivity"></activity>
+        <activity android:name=".activities.MapActivity" />
+        <activity android:name=".activities.CalendarActivity" />
+        <activity android:name=".activities.MainParentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
-package com.shishkindenis.locationtracker_kotlin.viewModel
+ackage com.shishkindenis.locationtracker_kotlin.viewModel
 
 //class MainViewModel : ViewModel() {
 //

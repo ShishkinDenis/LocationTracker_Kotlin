@@ -1,7 +1,8 @@
-package com.shishkindenis.parentmodule
+package com.shishkindenis.parentmodule.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.shishkindenis.parentmodule.R
 
 class CalendarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
