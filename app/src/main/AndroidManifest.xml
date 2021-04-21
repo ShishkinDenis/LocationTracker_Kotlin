@@ -14,16 +14,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationTracker_Kotlin">
-        <activity android:name=".activities.ChooseModuleActivity"></activity>
-        <activity android:name=".activities.PhoneAuthActivity" />
-        <activity android:name=".activities.EmailAuthActivity" />
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.ChooseModuleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.PhoneAuthActivity" />
+        <activity android:name=".activities.EmailAuthActivity" />
+        <activity android:name=".activities.MainActivity">
+
+
+
+        </activity>
+
+<!--        <activity android:name="com.shishkindenis.childmodule.SendLocationActivity">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.shishkindenis.childmodule.SendLocationActivity" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
 
 </manifest>

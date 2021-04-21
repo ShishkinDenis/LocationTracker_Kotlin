@@ -1,4 +1,4 @@
-package com.shishkindenis.locationtracker_kotlin;
+package com.shishkindenis.loginmodule;
 
 import android.util.Log;
 
