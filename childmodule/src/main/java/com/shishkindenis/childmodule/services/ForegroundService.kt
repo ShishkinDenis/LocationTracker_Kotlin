@@ -14,6 +14,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,7 +24,6 @@ import com.shishkindenis.locationtracker_kotlin.singletons.FirebaseUserSingleton
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 import kotlin.collections.HashMap
 
 
@@ -35,12 +35,21 @@ class ForegroundService : Service() {
     private val DATE_FIELD = "Date"
     private val datePattern = "yyyy-MM-dd"
     private val CHANNEL_ID = "ForegroundServiceChannel"
-    private val TAG = "TAG"
+    private val TAG = "LOCATION"
     private val firestoreDataBase = FirebaseFirestore.getInstance()
-    private val locationMap: Map<String, Any> = HashMap()
+    private var locationMap: MutableMap<String, Any> = HashMap()
 
-    @Inject
-    var firebaseUserSingleton: FirebaseUserSingleton? = null
+
+
+
+//    @Inject
+//    временно заменить на auth
+    var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
+
+    //    DELETE
+    private val auth = FirebaseAuth.getInstance()
+
+
     private var mFusedLocationClient: FusedLocationProviderClient? = null
     private var userId: String? = null
     private var time: String? = null
@@ -52,7 +61,7 @@ class ForegroundService : Service() {
             }
             addData()
             Log.d(
-                "Location",
+                TAG,
                 "TIME:" + DateFormat.getTimeInstance(
                     DateFormat.SHORT,
                     Locale.ENGLISH
@@ -65,13 +74,19 @@ class ForegroundService : Service() {
     override fun onCreate() {
 //        MyApplication.appComponent.inject(this)
         super.onCreate()
+//DELETE
+//        Log.d(TAG,"Service is running")
         isGpsEnabled()
-        user = firebaseUserSingleton!!.getFirebaseAuth()!!.currentUser
+//        user = firebaseUserSingleton!!.getFirebaseAuth()!!.currentUser
+        user = auth.currentUser
         if (user != null) {
+//            ОШИБКА будет?
             firebaseUserSingleton!!.setUserId(user!!.uid)
             userId = firebaseUserSingleton!!.getUserId()
         }
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -117,7 +132,7 @@ class ForegroundService : Service() {
     }
 
     fun getPosition(locationResult: LocationResult) {
-        val mLastLocation: Location = locationResult.getLastLocation()
+        val mLastLocation: Location = locationResult.lastLocation
         val dateFormat: DateFormat =
             SimpleDateFormat(datePattern)
         time = DateFormat.getTimeInstance(
@@ -127,7 +142,7 @@ class ForegroundService : Service() {
         locationMap.put(LATITUDE_FIELD, mLastLocation.latitude)
         locationMap.put(LONGITUDE_FIELD, mLastLocation.longitude)
         locationMap.put(DATE_FIELD, dateFormat.format(Date()))
-        locationMap.put(TIME_FIELD, time)
+//        locationMap.put(TIME_FIELD, time)
 
     }
 

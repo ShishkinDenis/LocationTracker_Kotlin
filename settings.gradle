@@ -1,5 +1,4 @@
 include ':loginmodule'
 include ':childmodule'
 include ':parentmodule'
-include ':app'
 rootProject.name = "LocationTracker_Kotlin"

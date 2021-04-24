@@ -1,5 +1,6 @@
 package com.shishkindenis.loginmodule
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -41,26 +42,24 @@ class EmailAuthActivity : AppCompatActivity() {
         emailAuthViewModel.toastwithEmail.observe(this, Observer {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })
-        emailAuthViewModel.startCalendarActivity.observe(this, Observer {
-            goToChooseModuleActivity()
+        emailAuthViewModel.startSendLocationActivity.observe(this, Observer {
+            goToSendLocationActivity()
         })
     }
 
-    fun goToChooseModuleActivity() {
-//        val intent = Intent(this, ChooseModuleActivity::class.java)
-//        finish()
-//        startActivity(intent)
+    fun goToSendLocationActivity() {
+        var intent: Intent? = null
+        try {
+            intent = Intent(
+                    this,
+                    Class.forName("com.shishkindenis.childmodule.activities.SendLocationActivity")
+            )
+            finish()
+            startActivity(intent)
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
     }
-
-
-//TODO DELETE
-
-//    fun showToastWithEmail(toastMessage: String?) {
-//        Toast.makeText(
-//            applicationContext, toastMessage,
-//            Toast.LENGTH_LONG
-//        ).show()
-//    }
 
     fun emailIsValid(): Boolean {
         return binding?.etEmail?.text.toString().isNotEmpty()

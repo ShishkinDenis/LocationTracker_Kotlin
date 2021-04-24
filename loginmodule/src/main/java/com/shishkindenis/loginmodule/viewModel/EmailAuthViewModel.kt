@@ -37,7 +37,7 @@ class EmailAuthViewModel() : ViewModel() {
         get() = toastWithEmailLiveData
     private val toastWithEmailLiveData = SingleLiveEvent<String>()
 
-    val startCalendarActivity: LiveData<Any>
+    val startSendLocationActivity: LiveData<Any>
         get() = startLiveData
     private val startLiveData = SingleLiveEvent<Any>()
 
@@ -66,8 +66,8 @@ class EmailAuthViewModel() : ViewModel() {
                     //                val user = firebaseUserSingleton!!.getFirebaseAuth()?.currentUser
                     //                userId = user!!.uid
                     //                    firebaseUserSingleton!!.setUserId(userId)
-                    //                    viewState.goToCalendarActivity()
-                    goToMainActivity()
+//КАЛЕНДАРЬ
+                    goToSendLocationActivity()
                 } else {
                     showToast(R.string.authentication_failed)
                 }
@@ -83,7 +83,11 @@ class EmailAuthViewModel() : ViewModel() {
     }
 
     //    TODO Calendar Activity
-    fun goToMainActivity() {
+//    fun goToMainActivity() {
+//        startLiveData.call()
+//    }
+
+    fun  goToSendLocationActivity(){
         startLiveData.call()
     }
 

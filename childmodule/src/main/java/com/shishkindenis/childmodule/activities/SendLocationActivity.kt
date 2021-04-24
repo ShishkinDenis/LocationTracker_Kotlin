@@ -18,17 +18,19 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.shishkindenis.childmodule.R
 import com.shishkindenis.childmodule.databinding.ActivitySendLocationBinding
 import com.shishkindenis.childmodule.services.ForegroundService
-import com.shishkindenis.loginmodule.di.MyApplication
-import javax.inject.Inject
+import com.shishkindenis.childmodule.viewModels.SendLocationViewModel
 
 class SendLocationActivity : AppCompatActivity() {
     private val PERMISSION_ID = 1
@@ -36,9 +38,10 @@ class SendLocationActivity : AppCompatActivity() {
 //    @Inject
 //    @InjectPresenter
 //    var sendLocationPresenter: SendLocationPresenter? = null
+    val sendLocationViewModel: SendLocationViewModel by viewModels()
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
-    private val networkStatusOn = false
+    private var networkStatusOn = false
     private var gpsStatusOn = false
     private var binding: ActivitySendLocationBinding? = null
     private val locationSwitchStateReceiver: BroadcastReceiver =
@@ -83,6 +86,14 @@ class SendLocationActivity : AppCompatActivity() {
         setGpsStatus()
         setNetworkStatus()
         startLocationDetermination()
+
+        sendLocationViewModel.toast.observe(this, Observer {
+            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+        })
+        sendLocationViewModel.service.observe(this, Observer {
+            stopService()
+        })
+
     }
 
     fun checkIgnoringBatteryOptimizationsPermission() {
@@ -122,7 +133,9 @@ class SendLocationActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        DELETE
 //        sendLocationPresenter.signOut()
+        sendLocationViewModel.signOut()
         setResult(RESULT_OK, null)
         finish()
         return super.onOptionsItemSelected(item)
@@ -205,7 +218,7 @@ class SendLocationActivity : AppCompatActivity() {
             binding?.tvProgress?.setText(R.string.location_determination_in_progress)
             true
         } else {
-            binding.tvGpsStatus.setText(R.string.gps_status_off)
+            binding?.tvGpsStatus?.setText(R.string.gps_status_off)
             false
         }
     }
@@ -222,7 +235,8 @@ class SendLocationActivity : AppCompatActivity() {
     fun sendLocationToFirebase() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-//                sendLocationPresenter.startLocationWorker()
+                sendLocationViewModel.startLocationWorker()
+
             } else {
                 showToast(R.string.turn_on_determination_of_location)
                 showLocationSourceSettings()
@@ -237,7 +251,11 @@ class SendLocationActivity : AppCompatActivity() {
         stopService(serviceIntent)
     }
 
-    class ConnectivityCallback : ConnectivityManager.NetworkCallback() {
+    fun showToast(toastMessage: Int) {
+        Toast.makeText(applicationContext, toastMessage, Toast.LENGTH_LONG).show()
+    }
+
+   inner class ConnectivityCallback : ConnectivityManager.NetworkCallback() {
         override fun onCapabilitiesChanged(
             network: Network,
             networkCapabilities: NetworkCapabilities
@@ -249,8 +267,8 @@ class SendLocationActivity : AppCompatActivity() {
             startService()
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                binding.tvNetworkStatus.setText(R.string.network_status_on)
-                binding.tvProgress.setText(R.string.location_determination_in_progress)
+                binding?.tvNetworkStatus?.setText(R.string.network_status_on)
+                binding?.tvProgress?.setText(R.string.location_determination_in_progress)
             }
         }
 
@@ -259,11 +277,11 @@ class SendLocationActivity : AppCompatActivity() {
             networkStatusOn = false
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                binding.tvNetworkStatus.setText(R.string.network_status_off)
+                binding?.tvNetworkStatus?.setText(R.string.network_status_off)
                 if (!gpsStatusOn) {
                     stopService()
                     showAlertDialog()
-                    binding.tvProgress.setText(R.string.location_determination_off)
+                    binding?.tvProgress?.setText(R.string.location_determination_off)
                 }
             }
         }
