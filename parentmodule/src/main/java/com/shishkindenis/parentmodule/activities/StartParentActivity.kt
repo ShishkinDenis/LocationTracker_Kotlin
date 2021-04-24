@@ -3,6 +3,7 @@ package com.shishkindenis.parentmodule.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.shishkindenis.loginmodule.MainLoginActivity
 import com.shishkindenis.parentmodule.R
 
 class StartParentActivity : AppCompatActivity() {
@@ -10,7 +11,11 @@ class StartParentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_parent)
 
-        val intent = Intent(this, MainParentActivity::class.java)
+        goToMainLoginActivity()
+    }
+
+    fun goToMainLoginActivity(){
+        val intent = Intent(this, MainLoginActivity::class.java)
         finish()
         startActivity(intent)
     }

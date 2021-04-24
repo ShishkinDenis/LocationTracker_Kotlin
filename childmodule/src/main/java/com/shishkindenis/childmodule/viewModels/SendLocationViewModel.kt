@@ -35,10 +35,8 @@ class SendLocationViewModel : ViewModel() {
     }
 
     fun signOut() {
-//        viewState.stopService()
         stopService()
         firebaseUserSingleton?.getFirebaseAuth()?.signOut()
-//        viewState.showToast(R.string.sign_out_successful)
         showToast(R.string.sign_out_successful)
     }
 
@@ -49,8 +47,6 @@ class SendLocationViewModel : ViewModel() {
     fun stopService(){
     serviceLiveData.call()
     }
-
-
 
 
 }

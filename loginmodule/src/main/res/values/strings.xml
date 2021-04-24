@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">LocationTracker_Parent_Kotlin</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in </string>

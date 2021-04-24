@@ -1,6 +1,9 @@
 package com.shishkindenis.loginmodule
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,8 +18,18 @@ class EmailAuthActivity : AppCompatActivity() {
     val emailAuthViewModel: EmailAuthViewModel by viewModels()
     private var binding: ActivityEmailAuthBinding? = null
 
+    private lateinit var appLabel : String
+
+     fun checkModuleName(): Boolean {
+        if(appLabel == "ChildModule") {
+            return true
+        }
+       return false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityEmailAuthBinding.inflate(layoutInflater)
 //        !!знаки
         val view: View = binding!!.root
@@ -42,9 +55,26 @@ class EmailAuthActivity : AppCompatActivity() {
         emailAuthViewModel.toastwithEmail.observe(this, Observer {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })
-        emailAuthViewModel.startSendLocationActivity.observe(this, Observer {
-            goToSendLocationActivity()
+
+//        DELETE
+//        emailAuthViewModel.startSendLocationActivity.observe(this, Observer {
+//            goToSendLocationActivity()
+//        })
+
+        appLabel = getAppLable(applicationContext).toString()
+        emailAuthViewModel.module.observe(this, Observer {
+            if(checkModuleName()) {
+                goToSendLocationActivity()
+            }
+            else{
+                goToCalendarActivity()
+            }
         })
+//        DELETE
+//        if(checkModuleName()) {
+//            Log.d("LOCATION", checkModuleName().toString())
+//        }
+
     }
 
     fun goToSendLocationActivity() {
@@ -53,6 +83,20 @@ class EmailAuthActivity : AppCompatActivity() {
             intent = Intent(
                     this,
                     Class.forName("com.shishkindenis.childmodule.activities.SendLocationActivity")
+            )
+            finish()
+            startActivity(intent)
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun goToCalendarActivity() {
+        var intent: Intent? = null
+        try {
+            intent = Intent(
+                this,
+                Class.forName("com.shishkindenis.parentmodule.activities.CalendarActivity")
             )
             finish()
             startActivity(intent)
@@ -94,6 +138,17 @@ class EmailAuthActivity : AppCompatActivity() {
             binding!!.etPassword.text.toString()
         )
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
+    }
+
+    fun getAppLable(context: Context): String? {
+        val packageManager: PackageManager = context.getPackageManager()
+        var applicationInfo: ApplicationInfo? = null
+        try {
+            applicationInfo =
+                packageManager.getApplicationInfo(context.getApplicationInfo().packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+        }
+        return (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "Unknown") as String
     }
 
 

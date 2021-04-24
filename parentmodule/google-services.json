@@ -200,6 +200,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "921544484943-3146o46k6jtsfl0p8f9lnj53rnm5viqf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shishkindenis.parentmodule",
+            "certificate_hash": "a8d927a74f210ea1c80f533ac9bf22b4bc07f31c"
+          }
+        },
+        {
           "client_id": "921544484943-6de5eda1r3hf1sd5fbuam9pb5bck2g0t.apps.googleusercontent.com",
           "client_type": 3
         }

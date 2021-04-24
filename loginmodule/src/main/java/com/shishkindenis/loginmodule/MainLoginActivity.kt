@@ -1,7 +1,11 @@
 package com.shishkindenis.loginmodule
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -33,14 +37,9 @@ class MainLoginActivity : AppCompatActivity() {
         binding!!.btnEmail.setOnClickListener { goToEmailAuthActivity() }
         binding!!.btnPhone.setOnClickListener { goToPhoneAuthActivity() }
 
-//            DELETE
-        mainLoginViewModel.logSomething()
 
-//                mainViewModel.toast.observe(this, Observer {
-//                    Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
-//                })
-//            mainViewModel.doSomething()
-
+//        DELETE
+        getAppLable(applicationContext)?.let { Log.d("LOCATION", it) }
     }
 
 //         fun goToCalendarActivityForResult() {
@@ -60,6 +59,17 @@ class MainLoginActivity : AppCompatActivity() {
         val intent = Intent(this, PhoneAuthActivity::class.java)
         finish()
         startActivity(intent)
+    }
+
+    fun getAppLable(context: Context): String? {
+        val packageManager: PackageManager = context.getPackageManager()
+        var applicationInfo: ApplicationInfo? = null
+        try {
+            applicationInfo =
+                packageManager.getApplicationInfo(context.getApplicationInfo().packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+        }
+        return (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "Unknown") as String
     }
 
 
