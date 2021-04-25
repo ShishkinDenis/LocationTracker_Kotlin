@@ -1,4 +1,4 @@
-package com.shishkindenis.locationtracker_kotlin.singletons
+package com.shishkindenis.loginmodule.singletons
 
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject

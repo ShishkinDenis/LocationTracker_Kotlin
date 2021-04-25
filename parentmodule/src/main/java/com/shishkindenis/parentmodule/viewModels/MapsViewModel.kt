@@ -12,11 +12,10 @@ import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.parentmodule.singletons.DateSingleton
 import com.shishkindenis.parentmodule.singletons.FirebaseUserSingleton
 
-class MapsViewModel: ViewModel() {
+class MapsViewModel : ViewModel() {
 
-// TODO   ЗАИНЖЕКТИТЬ В КОНСТРУКТОР
+    // TODO   ЗАИНЖЕКТИТЬ В КОНСТРУКТОР
     var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
-    var dateSingleton: DateSingleton? =  DateSingleton()
 
     private val DATE_FIELD = "Date"
     private val TAG = "Location"
@@ -24,71 +23,67 @@ class MapsViewModel: ViewModel() {
     private var date: String? = null
     private var userId: String? = null
 
-//NAMING
-    val backToCalendarActivityWithCancelledResult : LiveData<Any>
+    //NAMING
+    val backToCalendarActivityWithCancelledResult: LiveData<Any>
         get() = backToCalendarActivityWithCancelledResultLiveData
     private val backToCalendarActivityWithCancelledResultLiveData = SingleLiveEvent<Any>()
 
-    val backToCalendarActivityWithOkResult : LiveData<Any>
+    val backToCalendarActivityWithOkResult: LiveData<Any>
         get() = backToCalendarActivityWithOkResultLiveData
     private val backToCalendarActivityWithOkResultLiveData = SingleLiveEvent<Any>()
 
-    val getPosition : SingleLiveEvent<Any>
+    val getPosition: SingleLiveEvent<Any>
         get() = getPositionLiveData
     private val getPositionLiveData = SingleLiveEvent<Any>()
 
-    val setTrack : LiveData<Any>
+    val setTrack: LiveData<Any>
         get() = setTrackLiveData
     private val setTrackLiveData = SingleLiveEvent<Any>()
 
     fun readLocation() {
         firestoreDataBase = FirebaseFirestore.getInstance()
-//        userId = firebaseUserSingleton!!.getUserId()
-//        ВЫЗЫВАТЬ ИЗ СИНГЛТОНА?
         userId = firebaseUserSingleton?.getFirebaseAuth()?.currentUser?.uid
-
-        date = dateSingleton!!.getDate()
-
+        date = DateSingleton.getDate()
         firestoreDataBase?.collection(userId!!)
-            ?.whereEqualTo(DATE_FIELD, date)
-            ?.get()
-            ?.addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
-                if (task.isSuccessful) {
-                    if (task.result!!.isEmpty) {
+                ?.whereEqualTo(DATE_FIELD, date)
+                ?.get()
+                ?.addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
+                    if (task.isSuccessful) {
+                        if (task.result!!.isEmpty) {
 //                        viewState.backToCalendarActivityWithCancelledResult()
-                        callBackToCalendarActivityWithCancelledResult()
-                    } else {
-                        for (document in task.result!!) {
-                            Log.d(TAG, document.id + " => " + document.data)
+                            callBackToCalendarActivityWithCancelledResult()
+                        } else {
+                            for (document in task.result!!) {
+                                Log.d(TAG, document.id + " => " + document.data)
 //                            viewState.backToCalendarActivityWithOkResult()
-                            callBackToCalendarActivityWithOkResult()
+                                callBackToCalendarActivityWithOkResult()
 //                            viewState.getPosition(document)
-                            callGetPosition(document)
+                                callGetPosition(document)
 //                            viewState.setTrack()
-                            callSetTrack()
+                                callSetTrack()
+                            }
                         }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.exception)
                     }
-                } else {
-                    Log.w(TAG, "Error getting documents.", task.exception)
-                }
-            })
+                })
     }
 
 //    NAMING
 
-    fun callBackToCalendarActivityWithCancelledResult(){
+    fun callBackToCalendarActivityWithCancelledResult() {
         backToCalendarActivityWithCancelledResultLiveData.call()
     }
 
-    fun callBackToCalendarActivityWithOkResult(){
+    fun callBackToCalendarActivityWithOkResult() {
         backToCalendarActivityWithOkResultLiveData.call()
     }
 
-    fun callGetPosition(document: QueryDocumentSnapshot?){
+    fun callGetPosition(document: QueryDocumentSnapshot?) {
         getPositionLiveData.value = document
     }
 
-    fun callSetTrack(){
+    fun callSetTrack() {
         setTrackLiveData.call()
     }
 

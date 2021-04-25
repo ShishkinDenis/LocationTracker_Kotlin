@@ -10,10 +10,10 @@
         android:id="@+id/btnEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/blue"
         android:layout_marginStart="@dimen/button_margin_start_large"
         android:layout_marginTop="@dimen/button_margin_top_medium"
         android:layout_marginEnd="@dimen/button_margin_end"
+        android:backgroundTint="@color/blue"
         android:text="@string/email"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/tvChooseTheWayOfSigning"
@@ -50,9 +50,9 @@
 
     <TextView
         android:id="@+id/tvLocationTracker"
-        android:layout_marginStart="64dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
         android:text="@string/location_tracker"
         android:textSize="@dimen/location_tracker_text_size"
         app:layout_constraintBottom_toBottomOf="parent"

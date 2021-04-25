@@ -48,8 +48,8 @@
 
     <Button
         android:id="@+id/btnRequestCode"
-        android:layout_height="wrap_content"
         android:layout_width="@dimen/button_width_landscape_orientation"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/button_margin_start"
         android:layout_marginBottom="@dimen/button_margin_bottom_landscape"
         android:text="@string/request_code"

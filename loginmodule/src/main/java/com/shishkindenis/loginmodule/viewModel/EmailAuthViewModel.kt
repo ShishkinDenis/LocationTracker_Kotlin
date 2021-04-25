@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.shishkindenis.locationtracker_kotlin.singletons.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.SingleLiveEvent
+import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 import javax.inject.Inject
 
 
@@ -41,7 +41,7 @@ class EmailAuthViewModel() : ViewModel() {
 //        get() = startLiveData
 //    private val startLiveData = SingleLiveEvent<Any>()
 
-    val module : LiveData<Any>
+    val module: LiveData<Any>
         get() = moduleLiveData
     private val moduleLiveData = SingleLiveEvent<Any>()
 
@@ -49,13 +49,13 @@ class EmailAuthViewModel() : ViewModel() {
 
 //    firebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password!!)
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task: Task<AuthResult?> ->
-                if (task.isSuccessful) {
-                    showToastWithEmail("User with email: $email was signed up ")
-                } else {
-                    showToast(R.string.signing_up_failed)
+                .addOnCompleteListener { task: Task<AuthResult?> ->
+                    if (task.isSuccessful) {
+                        showToastWithEmail("User with email: $email was signed up ")
+                    } else {
+                        showToast(R.string.signing_up_failed)
+                    }
                 }
-            }
     }
 
     fun signIn(email: String, password: String) {
@@ -64,17 +64,17 @@ class EmailAuthViewModel() : ViewModel() {
 
 //    firebaseUserSingleton.getFirebaseAuth()?.signInWithEmailAndPassword(email!!, password!!)
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task: Task<AuthResult?> ->
-                if (task.isSuccessful) {
-                    showToast(R.string.authentication_successful)
-                    //                val user = firebaseUserSingleton!!.getFirebaseAuth()?.currentUser
-                    //                userId = user!!.uid
-                    //                    firebaseUserSingleton!!.setUserId(userId)
-                    goToSpecificModule()
-                } else {
-                    showToast(R.string.authentication_failed)
+                .addOnCompleteListener { task: Task<AuthResult?> ->
+                    if (task.isSuccessful) {
+                        showToast(R.string.authentication_successful)
+                        //                val user = firebaseUserSingleton!!.getFirebaseAuth()?.currentUser
+                        //                userId = user!!.uid
+                        //                    firebaseUserSingleton!!.setUserId(userId)
+                        goToSpecificModule()
+                    } else {
+                        showToast(R.string.authentication_failed)
+                    }
                 }
-            }
     }
 
     fun showToast(toastMessage: Int) {
@@ -85,20 +85,9 @@ class EmailAuthViewModel() : ViewModel() {
         toastWithEmailLiveData.value = toastMessage
     }
 
-    //    TODO Calendar Activity
-//    fun goToMainActivity() {
-//        startLiveData.call()
-//    }
-
-//    fun  goToSendLocationActivity(){
-//        startLiveData.call()
-//    }
-
-    fun   goToSpecificModule(){
+    fun goToSpecificModule() {
         moduleLiveData.call()
     }
-
-
 
 
 }

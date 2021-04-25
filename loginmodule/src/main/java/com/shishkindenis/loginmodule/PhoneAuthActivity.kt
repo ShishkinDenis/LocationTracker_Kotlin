@@ -1,5 +1,9 @@
 package com.shishkindenis.loginmodule
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -18,6 +22,7 @@ class PhoneAuthActivity : AppCompatActivity() {
     val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
     private var binding: ActivityPhoneAuthBinding? = null
     private val auth = FirebaseAuth.getInstance()
+    private lateinit var appLabel: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,7 @@ class PhoneAuthActivity : AppCompatActivity() {
             binding!!.pbPhoneAuth.visibility = View.VISIBLE
             if (codeIsValid()) {
                 phoneAuthViewModel.verifyPhoneNumberWithCode(
-                    binding!!.etVerificationCode.text.toString()
+                        binding!!.etVerificationCode.text.toString()
                 )
             } else {
                 setErrorIfInvalid()
@@ -51,32 +56,78 @@ class PhoneAuthActivity : AppCompatActivity() {
         phoneAuthViewModel.toast.observe(this, Observer {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })
-        phoneAuthViewModel.startCalendarActivity.observe(this, Observer {
-            goToChooseModuleActivity()
-        })
+
         phoneAuthViewModel.verifyButton.observe(this, Observer {
             enableVerifyButton()
         })
         phoneAuthViewModel.phoneNumberError.observe(this, Observer {
             showInvalidPhoneNumberError()
         })
+
+        appLabel = getAppLable(applicationContext).toString()
+        phoneAuthViewModel.module.observe(this, Observer {
+            if (checkModuleName()) {
+                goToSendLocationActivity()
+            } else {
+                goToCalendarActivity()
+            }
+        })
     }
 
-    fun goToChooseModuleActivity() {
-//        val intent = Intent(this, ChooseModuleActivity::class.java)
-//        finish()
-//        startActivity(intent)
+//    Перенести в BaseActivity
+    fun goToSendLocationActivity() {
+        var intent: Intent? = null
+        try {
+            intent = Intent(
+                    this,
+                    Class.forName("com.shishkindenis.childmodule.activities.SendLocationActivity")
+            )
+            finish()
+            startActivity(intent)
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
     }
+    fun goToCalendarActivity() {
+        var intent: Intent? = null
+        try {
+            intent = Intent(
+                    this,
+                    Class.forName("com.shishkindenis.parentmodule.activities.CalendarActivity")
+            )
+            finish()
+            startActivity(intent)
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+    fun checkModuleName(): Boolean {
+        if (appLabel == "ChildModule") {
+            return true
+        }
+        return false
+    }
+    fun getAppLable(context: Context): String? {
+        val packageManager: PackageManager = context.packageManager
+        var applicationInfo: ApplicationInfo? = null
+        try {
+            applicationInfo =
+                    packageManager.getApplicationInfo(context.applicationInfo.packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+        }
+        return (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "Unknown") as String
+    }
+
 
     private fun startPhoneNumberVerification(phoneNumber: String) {
 //        val options = PhoneAuthOptions.newBuilder(firebaseUserSingleton!!.getFirebaseAuth()!!)
         val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(phoneNumber)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(this)
+                .setPhoneNumber(phoneNumber)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this)
 //            .setCallbacks(phoneAuthPresenter!!.phoneVerificationCallback(firebaseUserSingleton!!.getFirebaseAuth())!!)
-            .setCallbacks(phoneAuthViewModel.phoneVerificationCallback())
-            .build()
+                .setCallbacks(phoneAuthViewModel.phoneVerificationCallback())
+                .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 

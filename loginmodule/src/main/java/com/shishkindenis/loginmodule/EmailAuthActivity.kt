@@ -17,15 +17,7 @@ class EmailAuthActivity : AppCompatActivity() {
 
     val emailAuthViewModel: EmailAuthViewModel by viewModels()
     private var binding: ActivityEmailAuthBinding? = null
-
-    private lateinit var appLabel : String
-
-     fun checkModuleName(): Boolean {
-        if(appLabel == "ChildModule") {
-            return true
-        }
-       return false
-    }
+    private lateinit var appLabel: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,25 +48,14 @@ class EmailAuthActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })
 
-//        DELETE
-//        emailAuthViewModel.startSendLocationActivity.observe(this, Observer {
-//            goToSendLocationActivity()
-//        })
-
         appLabel = getAppLable(applicationContext).toString()
         emailAuthViewModel.module.observe(this, Observer {
-            if(checkModuleName()) {
+            if (checkModuleName()) {
                 goToSendLocationActivity()
-            }
-            else{
+            } else {
                 goToCalendarActivity()
             }
         })
-//        DELETE
-//        if(checkModuleName()) {
-//            Log.d("LOCATION", checkModuleName().toString())
-//        }
-
     }
 
     fun goToSendLocationActivity() {
@@ -95,8 +76,8 @@ class EmailAuthActivity : AppCompatActivity() {
         var intent: Intent? = null
         try {
             intent = Intent(
-                this,
-                Class.forName("com.shishkindenis.parentmodule.activities.CalendarActivity")
+                    this,
+                    Class.forName("com.shishkindenis.parentmodule.activities.CalendarActivity")
             )
             finish()
             startActivity(intent)
@@ -125,8 +106,8 @@ class EmailAuthActivity : AppCompatActivity() {
     fun logInIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
         emailAuthViewModel.signIn(
-            binding!!.etEmail.text.toString(),
-            binding!!.etPassword.text.toString()
+                binding!!.etEmail.text.toString(),
+                binding!!.etPassword.text.toString()
         )
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
     }
@@ -134,10 +115,17 @@ class EmailAuthActivity : AppCompatActivity() {
     fun registerIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
         emailAuthViewModel.createAccount(
-            binding!!.etEmail.text.toString(),
-            binding!!.etPassword.text.toString()
+                binding!!.etEmail.text.toString(),
+                binding!!.etPassword.text.toString()
         )
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
+    }
+
+    fun checkModuleName(): Boolean {
+        if (appLabel == "ChildModule") {
+            return true
+        }
+        return false
     }
 
     fun getAppLable(context: Context): String? {
@@ -145,7 +133,7 @@ class EmailAuthActivity : AppCompatActivity() {
         var applicationInfo: ApplicationInfo? = null
         try {
             applicationInfo =
-                packageManager.getApplicationInfo(context.getApplicationInfo().packageName, 0)
+                    packageManager.getApplicationInfo(context.getApplicationInfo().packageName, 0)
         } catch (e: PackageManager.NameNotFoundException) {
         }
         return (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "Unknown") as String

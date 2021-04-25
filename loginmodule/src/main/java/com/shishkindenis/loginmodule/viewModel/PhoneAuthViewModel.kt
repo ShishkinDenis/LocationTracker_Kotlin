@@ -6,10 +6,9 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
-import com.shishkindenis.locationtracker_kotlin.singletons.FirebaseUserSingleton
+import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.SingleLiveEvent
-import javax.inject.Inject
 
 
 class PhoneAuthViewModel() : ViewModel() {
@@ -28,10 +27,9 @@ class PhoneAuthViewModel() : ViewModel() {
         get() = toastLiveData
     private val toastLiveData = SingleLiveEvent<Int>()
 
-    //    TODO naming
-    val startCalendarActivity: LiveData<Any>
-        get() = startLiveData
-    private val startLiveData = SingleLiveEvent<Any>()
+    val module: LiveData<Any>
+        get() = moduleLiveData
+    private val moduleLiveData = SingleLiveEvent<Any>()
 
     val verifyButton: LiveData<Any>
         get() = verifyButtonLiveData
@@ -42,10 +40,10 @@ class PhoneAuthViewModel() : ViewModel() {
     private val phoneNumberErrorLiveData = SingleLiveEvent<Any>()
 
     //    TODO Dagger
-    @Inject
-    constructor(firebaseUserSingleton: FirebaseUserSingleton) : this() {
-        this.firebaseUserSingleton = firebaseUserSingleton
-    }
+//    @Inject
+//    constructor(firebaseUserSingleton: FirebaseUserSingleton) : this() {
+//        this.firebaseUserSingleton = firebaseUserSingleton
+//    }
 
     fun phoneVerificationCallback(): PhoneAuthProvider.OnVerificationStateChangedCallbacks? {
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -62,8 +60,8 @@ class PhoneAuthViewModel() : ViewModel() {
             }
 
             override fun onCodeSent(
-                verificationId: String,
-                token: PhoneAuthProvider.ForceResendingToken
+                    verificationId: String,
+                    token: PhoneAuthProvider.ForceResendingToken
             ) {
                 phoneVerificationId = verificationId
                 forceResendingToken = token
@@ -77,21 +75,22 @@ class PhoneAuthViewModel() : ViewModel() {
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
 //    firebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener { task: Task<AuthResult> ->
-                if (task.isSuccessful) {
-                    //                val user = task.result!!.user
-                    //                userId = user!!.uid
-                    //                    firebaseUserSingleton!!.setUserId(userId)
-                    showToast(R.string.authentication_successful)
-                    //                TODO Calendar or SendActivity
-                    goToMainActivity()
-                } else {
-                    showToast(R.string.authentication_failed)
-                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        callShowInvalidPhoneNumberError()
+                .addOnCompleteListener { task: Task<AuthResult> ->
+                    if (task.isSuccessful) {
+                        //                val user = task.result!!.user
+                        //                userId = user!!.uid
+                        //                    firebaseUserSingleton!!.setUserId(userId)
+                        showToast(R.string.authentication_successful)
+                        //                TODO Calendar or SendActivity
+//                        goToMainActivity()
+                        goToSpecificModule()
+                    } else {
+                        showToast(R.string.authentication_failed)
+                        if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                            callShowInvalidPhoneNumberError()
+                        }
                     }
                 }
-            }
     }
 
     fun verifyPhoneNumberWithCode(code: String?) {
@@ -103,11 +102,6 @@ class PhoneAuthViewModel() : ViewModel() {
         toastLiveData.value = toastMessage
     }
 
-    //    TODO Calendar Activity
-    fun goToMainActivity() {
-        startLiveData.call()
-    }
-
     //TODO naming
     fun callEnableVerifyButton() {
         verifyButtonLiveData.call()
@@ -115,6 +109,10 @@ class PhoneAuthViewModel() : ViewModel() {
 
     fun callShowInvalidPhoneNumberError() {
         phoneNumberErrorLiveData.call()
+    }
+
+    fun goToSpecificModule() {
+        moduleLiveData.call()
     }
 
 }

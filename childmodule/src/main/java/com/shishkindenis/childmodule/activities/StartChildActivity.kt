@@ -13,7 +13,7 @@ class StartChildActivity : AppCompatActivity() {
         goToMainLoginActivity()
     }
 
-    fun goToMainLoginActivity(){
+    fun goToMainLoginActivity() {
         val intent = Intent(this, MainLoginActivity::class.java)
         finish()
         startActivity(intent)

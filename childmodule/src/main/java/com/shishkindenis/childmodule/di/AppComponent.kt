@@ -1,7 +1,6 @@
 package com.shishkindenis.childmodule.di
 
 
-
 //@Singleton
 //@Component(modules = [DateSingletonModule::class, FirebaseUserSingletonModule::class])
 //interface AppComponent {

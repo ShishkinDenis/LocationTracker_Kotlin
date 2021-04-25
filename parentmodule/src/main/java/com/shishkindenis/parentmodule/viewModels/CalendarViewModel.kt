@@ -5,7 +5,7 @@ import com.shishkindenis.parentmodule.singletons.FirebaseUserSingleton
 
 class CalendarViewModel : ViewModel() {
 
-//    Заинжектить в конструктор
+    //    Заинжектить в конструктор
     var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
 
     fun signOut() {

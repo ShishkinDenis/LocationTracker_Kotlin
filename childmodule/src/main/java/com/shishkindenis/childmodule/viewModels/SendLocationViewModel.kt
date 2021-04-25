@@ -6,13 +6,13 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.shishkindenis.childmodule.R
 import com.shishkindenis.childmodule.workers.LocationWorker
-import com.shishkindenis.locationtracker_kotlin.singletons.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.SingleLiveEvent
+import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 
 class SendLocationViewModel : ViewModel() {
 //    var firebaseUserSingleton: FirebaseUserSingleton? = null
 
-//    DELETE
+    //    DELETE
     var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
 
 //    @Inject
@@ -25,12 +25,12 @@ class SendLocationViewModel : ViewModel() {
     private val toastLiveData = SingleLiveEvent<Int>()
 
     val service: LiveData<Int>
-    get() = serviceLiveData
+        get() = serviceLiveData
     private val serviceLiveData = SingleLiveEvent<Int>()
 
     fun startLocationWorker() {
         val myWorkRequest =
-            OneTimeWorkRequest.Builder(LocationWorker::class.java).build()
+                OneTimeWorkRequest.Builder(LocationWorker::class.java).build()
         WorkManager.getInstance().enqueue(myWorkRequest)
     }
 
@@ -44,9 +44,8 @@ class SendLocationViewModel : ViewModel() {
         toastLiveData.value = toastMessage
     }
 
-    fun stopService(){
-    serviceLiveData.call()
+    fun stopService() {
+        serviceLiveData.call()
     }
-
 
 }

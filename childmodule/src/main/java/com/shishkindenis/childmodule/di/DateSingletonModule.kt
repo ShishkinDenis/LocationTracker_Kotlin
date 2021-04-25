@@ -1,7 +1,6 @@
 package com.shishkindenis.locationtracker_kotlin.di
 
 
-
 //@Module
 //class DateSingletonModule {
 //    @Provides

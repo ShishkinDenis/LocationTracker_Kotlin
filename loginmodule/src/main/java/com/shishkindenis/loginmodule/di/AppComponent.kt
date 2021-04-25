@@ -10,7 +10,8 @@ import javax.inject.Singleton
 
 
 @Singleton
-@Component(modules = [DateSingletonModule::class, FirebaseUserSingletonModule::class])
+//@Component(modules = [DateSingletonModule::class, FirebaseUserSingletonModule::class])
+@Component(modules = [FirebaseUserSingletonModule::class])
 interface AppComponent {
     fun inject(emailAuthActivity: EmailAuthActivity?)
 
