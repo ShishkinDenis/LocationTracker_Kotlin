@@ -15,16 +15,12 @@ import com.shishkindenis.parentmodule.singletons.DateSingleton
 
 class MapsViewModel : ViewModel() {
 
-    // TODO   ЗАИНЖЕКТИТЬ В КОНСТРУКТОР
-//    var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
-
     private val DATE_FIELD = "Date"
     private val TAG = "Location"
     private var firestoreDataBase: FirebaseFirestore? = null
     private var date: String? = null
     private var userId: String? = null
 
-    //NAMING
     val backToCalendarActivityWithCancelledResult: LiveData<Any>
         get() = backToCalendarActivityWithCancelledResultLiveData
     private val backToCalendarActivityWithCancelledResultLiveData = SingleLiveEvent<Any>()
@@ -43,49 +39,43 @@ class MapsViewModel : ViewModel() {
 
     fun readLocation() {
         firestoreDataBase = FirebaseFirestore.getInstance()
-//        userId = firebaseUserSingleton?.getFirebaseAuth()?.currentUser?.uid
         userId = FirebaseUserSingleton.getFirebaseAuth()?.currentUser?.uid
         date = DateSingleton.getDate()
         firestoreDataBase?.collection(userId!!)
-                ?.whereEqualTo(DATE_FIELD, date)
-                ?.get()
-                ?.addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
-                    if (task.isSuccessful) {
-                        if (task.result!!.isEmpty) {
-//                        viewState.backToCalendarActivityWithCancelledResult()
-                            callBackToCalendarActivityWithCancelledResult()
-                        } else {
-                            for (document in task.result!!) {
-                                Log.d(TAG, document.id + " => " + document.data)
-//                            viewState.backToCalendarActivityWithOkResult()
-                                callBackToCalendarActivityWithOkResult()
-//                            viewState.getPosition(document)
-                                callGetPosition(document)
-//                            viewState.setTrack()
-                                callSetTrack()
-                            }
-                        }
+            ?.whereEqualTo(DATE_FIELD, date)
+            ?.get()
+            ?.addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
+                if (task.isSuccessful) {
+                    if (task.result!!.isEmpty) {
+                        backToCalendarActivityWithCancelledResult()
                     } else {
-                        Log.w(TAG, "Error getting documents.", task.exception)
+                        for (document in task.result!!) {
+                            Log.d(TAG, document.id + " => " + document.data)
+                            backToCalendarActivityWithOkResult()
+                            getPosition(document)
+                            setTrack()
+                        }
                     }
-                })
+                } else {
+                    Log.w(TAG, "Error getting documents.", task.exception)
+                }
+            })
     }
 
-//    NAMING
 
-    fun callBackToCalendarActivityWithCancelledResult() {
+    fun backToCalendarActivityWithCancelledResult() {
         backToCalendarActivityWithCancelledResultLiveData.call()
     }
 
-    fun callBackToCalendarActivityWithOkResult() {
+    fun backToCalendarActivityWithOkResult() {
         backToCalendarActivityWithOkResultLiveData.call()
     }
 
-    fun callGetPosition(document: QueryDocumentSnapshot?) {
+    fun getPosition(document: QueryDocumentSnapshot?) {
         getPositionLiveData.value = document
     }
 
-    fun callSetTrack() {
+    fun setTrack() {
         setTrackLiveData.call()
     }
 

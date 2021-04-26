@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.shishkindenis.parentmodule.MapsActivity
 import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.databinding.ActivityCalendarBinding
 import com.shishkindenis.parentmodule.singletons.DateSingleton
@@ -21,9 +20,7 @@ import java.util.*
 class CalendarActivity : AppCompatActivity() {
 
     val calendarViewModel: CalendarViewModel by viewModels()
-//    @Inject
-//    @InjectPresenter
-//    internal lateinit var calendarPresenter: CalendarPresenter
+
     val YEAR = "Year"
     val MONTH = "Month"
     val DAY = "Day"
@@ -36,17 +33,14 @@ class CalendarActivity : AppCompatActivity() {
     var calendarDay = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        MyApplication.appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
-
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         val calendarActivityView: View = binding!!.root
         setContentView(calendarActivityView)
         calendar = Calendar.getInstance()
         setSupportActionBar(binding!!.toolbar)
 
-//        TODO:ЗАМЕНИТЬ на котлин стиль
         if (savedInstanceState == null) {
             showAlertDialog()
         }
@@ -68,6 +62,11 @@ class CalendarActivity : AppCompatActivity() {
             DateSingleton.setDate(date.toString())
         }
         binding!!.btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
+
+        calendarViewModel.toast.observe(this, androidx.lifecycle.Observer {
+            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+        })
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -91,9 +90,9 @@ class CalendarActivity : AppCompatActivity() {
 
     fun showAlertDialog() {
         AlertDialog.Builder(this)
-                .setMessage(R.string.choose_the_date_of_tracking)
-                .setPositiveButton(R.string.ok) { dialog, which -> }
-                .show()
+            .setMessage(R.string.choose_the_date_of_tracking)
+            .setPositiveButton(R.string.ok) { dialog, which -> }
+            .show()
     }
 
     fun goToMapActivity() {

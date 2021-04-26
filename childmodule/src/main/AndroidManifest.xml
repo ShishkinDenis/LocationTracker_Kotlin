@@ -24,18 +24,21 @@
             android:enabled="true"
             android:exported="true"></receiver>
 
-        <activity android:name=".activities.StartChildActivity">
+        <service
+            android:name=".services.ForegroundService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".activities.SendLocationActivity" />
+
+        <activity android:name="com.shishkindenis.loginmodule.activities.MainLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service
-            android:name=".services.ForegroundService"
-            android:enabled="true"
-            android:exported="true" />
-        <activity android:name=".activities.SendLocationActivity" />
+
     </application>
 
 </manifest>

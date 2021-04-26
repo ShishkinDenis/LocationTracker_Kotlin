@@ -1,33 +1,28 @@
-package com.shishkindenis.loginmodule
+package com.shishkindenis.loginmodule.activities
 
-import android.content.Context
-import android.content.Intent
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.databinding.ActivityPhoneAuthBinding
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
-import com.shishkindenis.loginmodule.viewModel.PhoneAuthViewModel
+import com.shishkindenis.loginmodule.viewModels.PhoneAuthViewModel
 import java.util.concurrent.TimeUnit
 
-class PhoneAuthActivity : AppCompatActivity() {
+class PhoneAuthActivity : BaseActivity() {
 
     val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
+
     private var binding: ActivityPhoneAuthBinding? = null
-//    private val auth = FirebaseAuth.getInstance()
-    private lateinit var appLabel: String
+    private lateinit var moduleName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhoneAuthBinding.inflate(layoutInflater)
-        //        !!знаки
         val view: View = binding!!.root
         setContentView(view)
 
@@ -44,7 +39,8 @@ class PhoneAuthActivity : AppCompatActivity() {
             binding!!.pbPhoneAuth.visibility = View.VISIBLE
             if (codeIsValid()) {
                 phoneAuthViewModel.verifyPhoneNumberWithCode(
-                        binding!!.etVerificationCode.text.toString())
+                    binding!!.etVerificationCode.text.toString()
+                )
             } else {
                 setErrorIfInvalid()
             }
@@ -55,79 +51,32 @@ class PhoneAuthActivity : AppCompatActivity() {
         phoneAuthViewModel.toast.observe(this, Observer {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })
-
         phoneAuthViewModel.verifyButton.observe(this, Observer {
             enableVerifyButton()
         })
         phoneAuthViewModel.phoneNumberError.observe(this, Observer {
             showInvalidPhoneNumberError()
         })
-
-        appLabel = getAppLable(applicationContext).toString()
+        moduleName = getModuleName(applicationContext).toString()
         phoneAuthViewModel.module.observe(this, Observer {
-            if (checkModuleName()) {
+            if (checkModuleName(moduleName)) {
                 goToSendLocationActivity()
             } else {
                 goToCalendarActivity()
             }
         })
+        phoneAuthViewModel.code.observe(this, Observer {
+            showInvalidCodeError()
+        })
     }
-
-//    Перенести в BaseActivity
-    fun goToSendLocationActivity() {
-        var intent: Intent? = null
-        try {
-            intent = Intent(
-                    this,
-                    Class.forName("com.shishkindenis.childmodule.activities.SendLocationActivity")
-            )
-            finish()
-            startActivity(intent)
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
-        }
-    }
-    fun goToCalendarActivity() {
-        var intent: Intent? = null
-        try {
-            intent = Intent(
-                    this,
-                    Class.forName("com.shishkindenis.parentmodule.activities.CalendarActivity")
-            )
-            finish()
-            startActivity(intent)
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
-        }
-    }
-    fun checkModuleName(): Boolean {
-        if (appLabel == "ChildModule") {
-            return true
-        }
-        return false
-    }
-    fun getAppLable(context: Context): String? {
-        val packageManager: PackageManager = context.packageManager
-        var applicationInfo: ApplicationInfo? = null
-        try {
-            applicationInfo =
-                    packageManager.getApplicationInfo(context.applicationInfo.packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-        }
-        return (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "Unknown") as String
-    }
-
 
     private fun startPhoneNumberVerification(phoneNumber: String) {
-//        val options = PhoneAuthOptions.newBuilder(firebaseUserSingleton!!.getFirebaseAuth()!!)
         val options = PhoneAuthOptions.newBuilder(FirebaseUserSingleton.getFirebaseAuth())
-//        val options = PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber(phoneNumber)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
-//            .setCallbacks(phoneAuthPresenter!!.phoneVerificationCallback(firebaseUserSingleton!!.getFirebaseAuth())!!)
-                .setCallbacks(phoneAuthViewModel.phoneVerificationCallback())
-                .build()
+            .setPhoneNumber(phoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(phoneAuthViewModel.phoneVerificationCallback())
+            .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 

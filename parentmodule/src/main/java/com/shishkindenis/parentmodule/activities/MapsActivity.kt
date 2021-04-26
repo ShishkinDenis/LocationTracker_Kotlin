@@ -1,11 +1,10 @@
-package com.shishkindenis.parentmodule
+package com.shishkindenis.parentmodule.activities
 
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,15 +18,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.databinding.ActivityMapsBinding
-import com.shishkindenis.parentmodule.singletons.DateSingleton
 import com.shishkindenis.parentmodule.viewModels.MapsViewModel
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     val mapsViewModel: MapsViewModel by viewModels()
-    //    @Inject
-//    @InjectPresenter
-//    internal lateinit var mapPresenter: MapPresenter
 
     private val LONGITUDE_FIELD = "Longitude"
     private val LATITUDE_FIELD = "Latitude"
@@ -40,10 +36,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var time: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        MyApplication.appComponent.inject(this)
+
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
-        val view: View = binding!!.getRoot()
+        val view: View = binding!!.root
         setContentView(view)
 
         mapsViewModel.backToCalendarActivityWithCancelledResult.observe(this, Observer {
@@ -69,9 +65,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isCompassEnabled = true
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             return
         }
         map!!.isMyLocationEnabled = true
@@ -82,10 +79,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val someplace = LatLng(latitude!!, longitude!!)
         map!!.addMarker(MarkerOptions().position(someplace).title(time))
         map!!.moveCamera(CameraUpdateFactory.newLatLng(someplace))
-        map!!.addPolyline(polylineOptions
+        map!!.addPolyline(
+            polylineOptions
                 ?.color(Color.BLUE)
                 ?.width(3f)
-                ?.add(LatLng(latitude!!, longitude!!)))
+                ?.add(LatLng(latitude!!, longitude!!))
+        )
     }
 
     fun getPosition(document: QueryDocumentSnapshot?) {
@@ -101,7 +100,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun initMapsFragment() {
         val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment?
+            .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
 

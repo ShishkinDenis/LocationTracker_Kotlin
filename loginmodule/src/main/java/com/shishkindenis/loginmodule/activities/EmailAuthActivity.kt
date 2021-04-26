@@ -1,29 +1,25 @@
-package com.shishkindenis.loginmodule
+package com.shishkindenis.loginmodule.activities
 
-import android.content.Context
-import android.content.Intent
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.databinding.ActivityEmailAuthBinding
-import com.shishkindenis.loginmodule.viewModel.EmailAuthViewModel
+import com.shishkindenis.loginmodule.viewModels.EmailAuthViewModel
 
-class EmailAuthActivity : AppCompatActivity() {
+class EmailAuthActivity : BaseActivity() {
 
     val emailAuthViewModel: EmailAuthViewModel by viewModels()
+
     private var binding: ActivityEmailAuthBinding? = null
-    private lateinit var appLabel: String
+    private lateinit var moduleName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityEmailAuthBinding.inflate(layoutInflater)
-//        !!знаки
         val view: View = binding!!.root
         setContentView(view)
 
@@ -48,42 +44,14 @@ class EmailAuthActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })
 
-        appLabel = getAppLable(applicationContext).toString()
+        moduleName = getModuleName(applicationContext).toString()
         emailAuthViewModel.module.observe(this, Observer {
-            if (checkModuleName()) {
+            if (checkModuleName(moduleName)) {
                 goToSendLocationActivity()
             } else {
                 goToCalendarActivity()
             }
         })
-    }
-
-    fun goToSendLocationActivity() {
-        var intent: Intent? = null
-        try {
-            intent = Intent(
-                    this,
-                    Class.forName("com.shishkindenis.childmodule.activities.SendLocationActivity")
-            )
-            finish()
-            startActivity(intent)
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
-        }
-    }
-
-    fun goToCalendarActivity() {
-        var intent: Intent? = null
-        try {
-            intent = Intent(
-                    this,
-                    Class.forName("com.shishkindenis.parentmodule.activities.CalendarActivity")
-            )
-            finish()
-            startActivity(intent)
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
-        }
     }
 
     fun emailIsValid(): Boolean {
@@ -106,8 +74,8 @@ class EmailAuthActivity : AppCompatActivity() {
     fun logInIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
         emailAuthViewModel.signIn(
-                binding!!.etEmail.text.toString(),
-                binding!!.etPassword.text.toString()
+            binding!!.etEmail.text.toString(),
+            binding!!.etPassword.text.toString()
         )
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
     }
@@ -115,29 +83,10 @@ class EmailAuthActivity : AppCompatActivity() {
     fun registerIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
         emailAuthViewModel.createAccount(
-                binding!!.etEmail.text.toString(),
-                binding!!.etPassword.text.toString()
+            binding!!.etEmail.text.toString(),
+            binding!!.etPassword.text.toString()
         )
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
     }
-
-    fun checkModuleName(): Boolean {
-        if (appLabel == "ChildModule") {
-            return true
-        }
-        return false
-    }
-
-    fun getAppLable(context: Context): String? {
-        val packageManager: PackageManager = context.getPackageManager()
-        var applicationInfo: ApplicationInfo? = null
-        try {
-            applicationInfo =
-                    packageManager.getApplicationInfo(context.getApplicationInfo().packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-        }
-        return (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "Unknown") as String
-    }
-
 
 }

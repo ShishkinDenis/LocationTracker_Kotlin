@@ -10,16 +10,6 @@ import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 
 class SendLocationViewModel : ViewModel() {
-//    var firebaseUserSingleton: FirebaseUserSingleton? = null
-
-    //    DELETE
-//    var firebaseUserSingletonO: FirebaseUserSingletonO? = FirebaseUserSingletonO()
-
-//    @Inject
-//    fun SendLocationPresenter(firebaseUserSingleton: FirebaseUserSingleton?) {
-//        this.firebaseUserSingleton = firebaseUserSingleton
-//    }
-
     val toast: LiveData<Int>
         get() = toastLiveData
     private val toastLiveData = SingleLiveEvent<Int>()
@@ -30,13 +20,12 @@ class SendLocationViewModel : ViewModel() {
 
     fun startLocationWorker() {
         val myWorkRequest =
-                OneTimeWorkRequest.Builder(LocationWorker::class.java).build()
+            OneTimeWorkRequest.Builder(LocationWorker::class.java).build()
         WorkManager.getInstance().enqueue(myWorkRequest)
     }
 
     fun signOut() {
         stopService()
-//        firebaseUserSingletonO?.getFirebaseAuth()?.signOut()
         FirebaseUserSingleton.getFirebaseAuth()?.signOut()
         showToast(R.string.sign_out_successful)
     }

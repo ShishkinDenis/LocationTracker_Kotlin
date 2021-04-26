@@ -35,4 +35,8 @@
     <string name="verify_code">Verify Code</string>
     <string name="request_code">Request Code</string>
     <string name="parent_edition">Parent edition</string>
+    <string name="send_location_activity">com.shishkindenis.childmodule.activities.SendLocationActivity</string>
+    <string name="calendar_activity">com.shishkindenis.parentmodule.activities.CalendarActivity</string>
+    <string name="unknown">Unknown</string>
+    <string name="child_module">ChildModule</string>
 </resources>

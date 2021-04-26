@@ -1,17 +1,23 @@
 package com.shishkindenis.parentmodule.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
+import com.shishkindenis.parentmodule.R
 
 class CalendarViewModel : ViewModel() {
 
-    //    Заинжектить в конструктор
-//    var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
+    val toast: LiveData<Int>
+        get() = toastLiveData
+    private val toastLiveData = SingleLiveEvent<Int>()
 
     fun signOut() {
-//        firebaseUserSingleton?.getFirebaseAuth()?.signOut()
         FirebaseUserSingleton.getFirebaseAuth()?.signOut()
-//        TODO
-//        viewState.showToast(R.string.sign_out_successful)
+        showToast(R.string.sign_out_successful)
+    }
+
+    fun showToast(toastMessage: Int) {
+        toastLiveData.value = toastMessage
     }
 }

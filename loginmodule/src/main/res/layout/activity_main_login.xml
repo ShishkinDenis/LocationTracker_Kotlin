@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainLoginActivity">
+    tools:context=".activities.MainLoginActivity">
 
     <Button
         android:id="@+id/btnEmail"
@@ -13,7 +13,6 @@
         android:layout_marginStart="@dimen/button_margin_start_large"
         android:layout_marginTop="@dimen/button_margin_top_medium"
         android:layout_marginEnd="@dimen/button_margin_end"
-        android:backgroundTint="@color/blue"
         android:text="@string/email"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/tvChooseTheWayOfSigning"
@@ -28,7 +27,6 @@
         android:layout_marginStart="@dimen/button_margin_start_large"
         android:layout_marginTop="@dimen/button_margin_top_normal"
         android:layout_marginEnd="@dimen/button_margin_end"
-        android:backgroundTint="@color/blue"
         android:text="@string/phone"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/btnEmail"

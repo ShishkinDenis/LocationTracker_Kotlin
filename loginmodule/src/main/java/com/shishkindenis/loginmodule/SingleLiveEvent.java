@@ -23,7 +23,7 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
             Log.w(TAG, "Multiple observers registered but only one will be notified of changes.");
         }
 
-           super.observe(owner, new Observer<T>() {
+        super.observe(owner, new Observer<T>() {
             @Override
             public void onChanged(@Nullable T t) {
                 if (mPending.compareAndSet(true, false)) {
