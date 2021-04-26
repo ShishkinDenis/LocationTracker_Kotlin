@@ -1,7 +1,7 @@
-package com.shishkindenis.parentmodule.singletons
+package com.shishkindenis.loginmodule.singletons
 
 
-//class FirebaseUserSingleton @Inject constructor() {
+//class FirebaseUserSingletonO @Inject constructor() {
 //    //class FirebaseUserSingleton  constructor() {
 //    private val auth = FirebaseAuth.getInstance()
 //    private var userId: String? = null

@@ -48,13 +48,6 @@ class MainLoginActivity : AppCompatActivity() {
         })
     }
 
-//         fun goToCalendarActivityForResult() {
-//            val intent = Intent(this, CalendarActivity::class.java)
-//            finish()
-//            startActivityForResult(intent, 2)
-//        }
-
-
     fun goToEmailAuthActivity() {
         val intent = Intent(this, EmailAuthActivity::class.java)
         finish()

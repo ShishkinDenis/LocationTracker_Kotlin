@@ -10,10 +10,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.shishkindenis.loginmodule.databinding.ActivityPhoneAuthBinding
+import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.viewModel.PhoneAuthViewModel
 import java.util.concurrent.TimeUnit
 
@@ -21,7 +21,7 @@ class PhoneAuthActivity : AppCompatActivity() {
 
     val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
     private var binding: ActivityPhoneAuthBinding? = null
-    private val auth = FirebaseAuth.getInstance()
+//    private val auth = FirebaseAuth.getInstance()
     private lateinit var appLabel: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +44,7 @@ class PhoneAuthActivity : AppCompatActivity() {
             binding!!.pbPhoneAuth.visibility = View.VISIBLE
             if (codeIsValid()) {
                 phoneAuthViewModel.verifyPhoneNumberWithCode(
-                        binding!!.etVerificationCode.text.toString()
-                )
+                        binding!!.etVerificationCode.text.toString())
             } else {
                 setErrorIfInvalid()
             }
@@ -121,7 +120,8 @@ class PhoneAuthActivity : AppCompatActivity() {
 
     private fun startPhoneNumberVerification(phoneNumber: String) {
 //        val options = PhoneAuthOptions.newBuilder(firebaseUserSingleton!!.getFirebaseAuth()!!)
-        val options = PhoneAuthOptions.newBuilder(auth)
+        val options = PhoneAuthOptions.newBuilder(FirebaseUserSingleton.getFirebaseAuth())
+//        val options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(phoneNumber)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setActivity(this)

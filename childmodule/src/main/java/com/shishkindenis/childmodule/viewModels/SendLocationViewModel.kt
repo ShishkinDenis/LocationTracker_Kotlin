@@ -13,7 +13,7 @@ class SendLocationViewModel : ViewModel() {
 //    var firebaseUserSingleton: FirebaseUserSingleton? = null
 
     //    DELETE
-    var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
+//    var firebaseUserSingletonO: FirebaseUserSingletonO? = FirebaseUserSingletonO()
 
 //    @Inject
 //    fun SendLocationPresenter(firebaseUserSingleton: FirebaseUserSingleton?) {
@@ -36,7 +36,8 @@ class SendLocationViewModel : ViewModel() {
 
     fun signOut() {
         stopService()
-        firebaseUserSingleton?.getFirebaseAuth()?.signOut()
+//        firebaseUserSingletonO?.getFirebaseAuth()?.signOut()
+        FirebaseUserSingleton.getFirebaseAuth()?.signOut()
         showToast(R.string.sign_out_successful)
     }
 

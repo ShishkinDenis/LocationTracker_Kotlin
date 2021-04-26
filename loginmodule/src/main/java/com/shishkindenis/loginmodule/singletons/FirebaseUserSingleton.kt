@@ -1,11 +1,8 @@
 package com.shishkindenis.loginmodule.singletons
 
 import com.google.firebase.auth.FirebaseAuth
-import javax.inject.Inject
 
-
-class FirebaseUserSingleton @Inject constructor() {
-    //class FirebaseUserSingleton  constructor() {
+object FirebaseUserSingleton {
     private val auth = FirebaseAuth.getInstance()
     private var userId: String? = null
 

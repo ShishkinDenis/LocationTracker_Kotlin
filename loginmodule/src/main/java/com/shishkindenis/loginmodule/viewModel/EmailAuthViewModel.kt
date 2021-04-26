@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
-import javax.inject.Inject
 
 
 class EmailAuthViewModel() : ViewModel() {
@@ -16,15 +14,15 @@ class EmailAuthViewModel() : ViewModel() {
 //    baseActivity
 
     private var userId: String? = null
-    lateinit var firebaseUserSingleton: FirebaseUserSingleton
+//    lateinit var firebaseUserSingletonO: FirebaseUserSingletonO
 
     //    DELETE
-    private val auth = FirebaseAuth.getInstance()
+//    private val auth = FirebaseAuth.getInstance()
 
-    @Inject
-    constructor(firebaseUserSingleton: FirebaseUserSingleton) : this() {
-        this.firebaseUserSingleton = firebaseUserSingleton
-    }
+//    @Inject
+//    constructor(firebaseUserSingletonO: FirebaseUserSingletonO) : this() {
+//        this.firebaseUserSingletonO = firebaseUserSingletonO
+//    }
 
     //    TODO
 //    Можно ли проще?
@@ -47,9 +45,10 @@ class EmailAuthViewModel() : ViewModel() {
 
     fun createAccount(email: String, password: String?) {
 
-//    firebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password!!)
-        auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task: Task<AuthResult?> ->
+//        firebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password!!)
+        FirebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password)
+//        auth.createUserWithEmailAndPassword(email, password)
+                ?.addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {
                         showToastWithEmail("User with email: $email was signed up ")
                     } else {
@@ -63,8 +62,9 @@ class EmailAuthViewModel() : ViewModel() {
 //        var firebaseAuth : FirebaseAuth? = firebaseUserSingleton.getFirebaseAuth();
 
 //    firebaseUserSingleton.getFirebaseAuth()?.signInWithEmailAndPassword(email!!, password!!)
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task: Task<AuthResult?> ->
+        FirebaseUserSingleton.getFirebaseAuth()?.signInWithEmailAndPassword(email, password)
+//        auth.signInWithEmailAndPassword(email, password)
+                ?.addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {
                         showToast(R.string.authentication_successful)
                         //                val user = firebaseUserSingleton!!.getFirebaseAuth()?.currentUser

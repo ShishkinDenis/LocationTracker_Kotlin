@@ -9,13 +9,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.shishkindenis.loginmodule.SingleLiveEvent
+import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 import com.shishkindenis.parentmodule.singletons.DateSingleton
-import com.shishkindenis.parentmodule.singletons.FirebaseUserSingleton
+
 
 class MapsViewModel : ViewModel() {
 
     // TODO   ЗАИНЖЕКТИТЬ В КОНСТРУКТОР
-    var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
+//    var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
 
     private val DATE_FIELD = "Date"
     private val TAG = "Location"
@@ -42,7 +43,8 @@ class MapsViewModel : ViewModel() {
 
     fun readLocation() {
         firestoreDataBase = FirebaseFirestore.getInstance()
-        userId = firebaseUserSingleton?.getFirebaseAuth()?.currentUser?.uid
+//        userId = firebaseUserSingleton?.getFirebaseAuth()?.currentUser?.uid
+        userId = FirebaseUserSingleton.getFirebaseAuth()?.currentUser?.uid
         date = DateSingleton.getDate()
         firestoreDataBase?.collection(userId!!)
                 ?.whereEqualTo(DATE_FIELD, date)

@@ -14,7 +14,6 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,10 +41,10 @@ class ForegroundService : Service() {
 
     //    @Inject
 //    временно заменить на auth
-    var firebaseUserSingleton: FirebaseUserSingleton? = FirebaseUserSingleton()
+//    var firebaseUserSingletonO: FirebaseUserSingletonO? = FirebaseUserSingletonO()
 
     //    DELETE
-    private val auth = FirebaseAuth.getInstance()
+//    private val auth = FirebaseAuth.getInstance()
 
     private var mFusedLocationClient: FusedLocationProviderClient? = null
     private var userId: String? = null
@@ -67,11 +66,14 @@ class ForegroundService : Service() {
         super.onCreate()
         isGpsEnabled()
 //        user = firebaseUserSingleton!!.getFirebaseAuth()!!.currentUser
-        user = auth.currentUser
+        user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser
+//        user = auth.currentUser
         if (user != null) {
 //            ОШИБКА будет?
-            firebaseUserSingleton!!.setUserId(user!!.uid)
-            userId = firebaseUserSingleton!!.getUserId()
+//            firebaseUserSingletonO!!.setUserId(user!!.uid)
+            FirebaseUserSingleton.setUserId(user!!.uid)
+//            userId = firebaseUserSingletonO!!.getUserId()
+            userId = FirebaseUserSingleton.getUserId()
         }
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }

@@ -5,18 +5,21 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.*
-import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.SingleLiveEvent
+import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 
 
 class PhoneAuthViewModel() : ViewModel() {
 
     //  TODO DELETE
-    private val auth = FirebaseAuth.getInstance()
+//    private val auth = FirebaseAuth.getInstance()
 
-    lateinit var firebaseUserSingleton: FirebaseUserSingleton
+//    lateinit var firebaseUserSingletonO: FirebaseUserSingletonO
     private var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
     private var phoneVerificationId: String? = null
     private var forceResendingToken: PhoneAuthProvider.ForceResendingToken? = null
@@ -74,8 +77,9 @@ class PhoneAuthViewModel() : ViewModel() {
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
 //    firebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener { task: Task<AuthResult> ->
+        FirebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
+//        auth.signInWithCredential(credential)
+                ?.addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
                         //                val user = task.result!!.user
                         //                userId = user!!.uid
