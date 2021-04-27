@@ -12,7 +12,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+
     <application
+        android:name="com.shishkindenis.childmodule.di.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -29,9 +31,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activities.SendLocationActivity" />
+        <activity android:name=".view.SendLocationActivity" />
 
-        <activity android:name="com.shishkindenis.loginmodule.activities.MainLoginActivity">
+        <activity android:name="com.shishkindenis.loginmodule.view.MainLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

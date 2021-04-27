@@ -6,8 +6,8 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.shishkindenis.childmodule.R
 import com.shishkindenis.childmodule.workers.LocationWorker
-import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
+import com.shishkindenis.loginmodule.util.SingleLiveEvent
 
 class SendLocationViewModel : ViewModel() {
     val toast: LiveData<Int>

@@ -3,10 +3,10 @@
     package="com.shishkindenis.loginmodule">
 
     <application>
-        <activity android:name=".activities.BaseActivity"></activity>
-        <activity android:name=".activities.PhoneAuthActivity" />
-        <activity android:name=".activities.EmailAuthActivity" />
-        <activity android:name=".activities.MainLoginActivity" />
+        <activity android:name=".view.BaseActivity"></activity>
+        <activity android:name=".view.PhoneAuthActivity" />
+        <activity android:name=".emailAuth.view.EmailAuthActivity" />
+        <activity android:name=".view.MainLoginActivity" />
     </application>
 
 </manifest>

@@ -10,8 +10,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.shishkindenis.loginmodule.R
-import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
+import com.shishkindenis.loginmodule.util.SingleLiveEvent
 
 
 class PhoneAuthViewModel() : ViewModel() {
@@ -28,9 +28,9 @@ class PhoneAuthViewModel() : ViewModel() {
         get() = codeLiveData
     private val codeLiveData = SingleLiveEvent<Any>()
 
-    val module: LiveData<Any>
-        get() = moduleLiveData
-    private val moduleLiveData = SingleLiveEvent<Any>()
+    val applicationModule: LiveData<Any>
+        get() = applicationModuleLiveData
+    private val applicationModuleLiveData = SingleLiveEvent<Any>()
 
     val verifyButton: LiveData<Any>
         get() = verifyButtonLiveData
@@ -71,7 +71,7 @@ class PhoneAuthViewModel() : ViewModel() {
             ?.addOnCompleteListener { task: Task<AuthResult> ->
                 if (task.isSuccessful) {
                     showToast(R.string.authentication_successful)
-                    goToSpecificModule()
+                    goToApplicationModule()
                 } else {
                     showToast(R.string.authentication_failed)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -98,8 +98,8 @@ class PhoneAuthViewModel() : ViewModel() {
         phoneNumberErrorLiveData.call()
     }
 
-    fun goToSpecificModule() {
-        moduleLiveData.call()
+    fun goToApplicationModule() {
+        applicationModuleLiveData.call()
     }
 
     fun showInvalidCodeError() {

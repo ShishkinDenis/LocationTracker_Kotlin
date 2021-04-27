@@ -1,4 +1,4 @@
-package com.shishkindenis.parentmodule.viewModels
+package com.shishkindenis.parentmodule.maps.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,8 +8,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
+import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import com.shishkindenis.parentmodule.singletons.DateSingleton
 
 

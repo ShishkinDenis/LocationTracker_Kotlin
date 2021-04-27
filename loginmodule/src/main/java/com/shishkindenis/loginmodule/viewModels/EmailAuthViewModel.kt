@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.shishkindenis.loginmodule.R
-import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
+import com.shishkindenis.loginmodule.util.SingleLiveEvent
 
 
 class EmailAuthViewModel() : ViewModel() {
+
 
     val toast: LiveData<Int>
         get() = toastLiveData
@@ -19,9 +20,9 @@ class EmailAuthViewModel() : ViewModel() {
         get() = toastWithEmailLiveData
     private val toastWithEmailLiveData = SingleLiveEvent<String>()
 
-    val module: LiveData<Any>
-        get() = moduleLiveData
-    private val moduleLiveData = SingleLiveEvent<Any>()
+    val applicationModule: LiveData<Any>
+        get() = applicationModuleLiveData
+    private val applicationModuleLiveData = SingleLiveEvent<Any>()
 
     fun createAccount(email: String, password: String?) {
         FirebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password)
@@ -39,7 +40,8 @@ class EmailAuthViewModel() : ViewModel() {
             ?.addOnCompleteListener { task: Task<AuthResult?> ->
                 if (task.isSuccessful) {
                     showToast(R.string.authentication_successful)
-                    goToSpecificModule()
+                    goToApplicationModule()
+
                 } else {
                     showToast(R.string.authentication_failed)
                 }
@@ -54,8 +56,8 @@ class EmailAuthViewModel() : ViewModel() {
         toastWithEmailLiveData.value = toastMessage
     }
 
-    fun goToSpecificModule() {
-        moduleLiveData.call()
+    fun goToApplicationModule() {
+        applicationModuleLiveData.call()
     }
 
 

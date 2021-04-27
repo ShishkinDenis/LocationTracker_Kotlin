@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
 
     android:backgroundTint="@color/blue"
-    tools:context=".activities.EmailAuthActivity">
+    tools:context=".emailAuth.view.EmailAuthActivity">
 
     <EditText
         android:id="@+id/etEmail"

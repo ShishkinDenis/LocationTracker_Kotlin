@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shishkindenis.childmodule.R
-import com.shishkindenis.childmodule.activities.SendLocationActivity
+import com.shishkindenis.childmodule.view.SendLocationActivity
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -46,7 +46,9 @@ class ForegroundService : Service() {
             if (locationResult != null) {
                 getPosition(locationResult)
             }
-            addData()
+//            TODO DELETE
+//            addData()
+            addData(locationMap)
             Log.d(
                 TAG,
                 "TIME:" + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ENGLISH)
@@ -117,8 +119,9 @@ class ForegroundService : Service() {
         locationMap.put(TIME_FIELD, time.toString())
         Log.d("LOCATION", time.toString())
     }
-
-    fun addData() {
+    //            TODO DELETE
+//    fun addData() {
+    fun addData(locationMap: MutableMap<String, Any>) {
         firestoreDataBase.collection(userId!!)
             .add(locationMap)
             .addOnSuccessListener { documentReference: DocumentReference ->

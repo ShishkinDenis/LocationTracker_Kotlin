@@ -1,4 +1,4 @@
-package com.shishkindenis.loginmodule.activities
+package com.shishkindenis.loginmodule.view
 
 import android.os.Bundle
 import android.view.View
@@ -7,18 +7,27 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.shishkindenis.loginmodule.LoginNavigation
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.databinding.ActivityPhoneAuthBinding
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.viewModels.PhoneAuthViewModel
+import dagger.android.support.DaggerAppCompatActivity
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class PhoneAuthActivity : BaseActivity() {
+//class PhoneAuthActivity : BaseActivity() {
+class PhoneAuthActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var navigation: LoginNavigation
 
     val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
 
     private var binding: ActivityPhoneAuthBinding? = null
-    private lateinit var moduleName: String
+//    private lateinit var moduleName: String
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +66,18 @@ class PhoneAuthActivity : BaseActivity() {
         phoneAuthViewModel.phoneNumberError.observe(this, Observer {
             showInvalidPhoneNumberError()
         })
-        moduleName = getModuleName(applicationContext).toString()
-        phoneAuthViewModel.module.observe(this, Observer {
-            if (checkModuleName(moduleName)) {
-                goToSendLocationActivity()
-            } else {
-                goToCalendarActivity()
-            }
+
+        phoneAuthViewModel.applicationModule.observe(this, Observer {
+            navigation.finishLogin(this)
         })
+//        moduleName = getModuleName(applicationContext).toString()
+//        phoneAuthViewModel.module.observe(this, Observer {
+//            if (checkModuleName(moduleName)) {
+//                goToSendLocationActivity()
+//            } else {
+//                goToCalendarActivity()
+//            }
+//        })
         phoneAuthViewModel.code.observe(this, Observer {
             showInvalidCodeError()
         })

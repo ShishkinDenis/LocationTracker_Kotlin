@@ -1,6 +1,7 @@
-package com.shishkindenis.parentmodule.activities
+package com.shishkindenis.parentmodule.calendar.view
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,13 +12,18 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.shishkindenis.parentmodule.R
+import com.shishkindenis.parentmodule.calendar.viewModel.CalendarViewModel
 import com.shishkindenis.parentmodule.databinding.ActivityCalendarBinding
+import com.shishkindenis.parentmodule.maps.view.MapsActivity
 import com.shishkindenis.parentmodule.singletons.DateSingleton
-import com.shishkindenis.parentmodule.viewModels.CalendarViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarActivity : AppCompatActivity() {
+
+    companion object {
+        fun getIntent(context: Context) = Intent(context, CalendarActivity::class.java)
+    }
 
     val calendarViewModel: CalendarViewModel by viewModels()
 

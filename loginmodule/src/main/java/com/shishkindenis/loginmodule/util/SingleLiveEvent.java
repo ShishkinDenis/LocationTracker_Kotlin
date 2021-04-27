@@ -1,4 +1,4 @@
-package com.shishkindenis.loginmodule;
+package com.shishkindenis.loginmodule.util;
 
 import android.util.Log;
 

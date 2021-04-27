@@ -1,9 +1,9 @@
-package com.shishkindenis.parentmodule.viewModels
+package com.shishkindenis.parentmodule.calendar.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.shishkindenis.loginmodule.SingleLiveEvent
 import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
+import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import com.shishkindenis.parentmodule.R
 
 class CalendarViewModel : ViewModel() {

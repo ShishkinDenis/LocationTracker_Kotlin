@@ -1,4 +1,4 @@
-package com.shishkindenis.parentmodule.activities
+package com.shishkindenis.parentmodule.maps.view
 
 import android.Manifest
 import android.app.Activity
@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.databinding.ActivityMapsBinding
-import com.shishkindenis.parentmodule.viewModels.MapsViewModel
+import com.shishkindenis.parentmodule.maps.viewModel.MapsViewModel
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     val mapsViewModel: MapsViewModel by viewModels()

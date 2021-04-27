@@ -1,4 +1,4 @@
-package com.shishkindenis.childmodule.activities
+package com.shishkindenis.childmodule.view
 
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -33,6 +33,10 @@ import com.shishkindenis.childmodule.services.ForegroundService
 import com.shishkindenis.childmodule.viewModels.SendLocationViewModel
 
 class SendLocationActivity : AppCompatActivity() {
+
+    companion object {
+        fun getIntent(context: Context) = Intent(context, SendLocationActivity::class.java)
+    }
 
     val sendLocationViewModel: SendLocationViewModel by viewModels()
 

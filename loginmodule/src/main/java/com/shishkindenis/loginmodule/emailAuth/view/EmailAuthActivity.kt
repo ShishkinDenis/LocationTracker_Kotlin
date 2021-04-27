@@ -1,20 +1,25 @@
-package com.shishkindenis.loginmodule.activities
+package com.shishkindenis.loginmodule.emailAuth.view
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.shishkindenis.loginmodule.LoginNavigation
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.databinding.ActivityEmailAuthBinding
 import com.shishkindenis.loginmodule.viewModels.EmailAuthViewModel
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-class EmailAuthActivity : BaseActivity() {
+class EmailAuthActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var navigation: LoginNavigation
 
     val emailAuthViewModel: EmailAuthViewModel by viewModels()
 
     private var binding: ActivityEmailAuthBinding? = null
-    private lateinit var moduleName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +49,8 @@ class EmailAuthActivity : BaseActivity() {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })
 
-        moduleName = getModuleName(applicationContext).toString()
-        emailAuthViewModel.module.observe(this, Observer {
-            if (checkModuleName(moduleName)) {
-                goToSendLocationActivity()
-            } else {
-                goToCalendarActivity()
-            }
+        emailAuthViewModel.applicationModule.observe(this, Observer {
+            navigation.finishLogin(this)
         })
     }
 
@@ -73,19 +73,13 @@ class EmailAuthActivity : BaseActivity() {
 
     fun logInIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
-        emailAuthViewModel.signIn(
-            binding!!.etEmail.text.toString(),
-            binding!!.etPassword.text.toString()
-        )
+        emailAuthViewModel.signIn(binding!!.etEmail.text.toString(), binding!!.etPassword.text.toString())
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
     }
 
     fun registerIfValid() {
         binding!!.pbEmailAuth.visibility = View.VISIBLE
-        emailAuthViewModel.createAccount(
-            binding!!.etEmail.text.toString(),
-            binding!!.etPassword.text.toString()
-        )
+        emailAuthViewModel.createAccount(binding!!.etEmail.text.toString(), binding!!.etPassword.text.toString())
         binding!!.pbEmailAuth.visibility = View.INVISIBLE
     }
 
