@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @ActivityScope
 class SendLocationNavigation @Inject constructor() : LoginNavigation {
-   override fun finishLogin(activity: Activity) : Intent {
+   override fun getPostLoginActivity(activity: Activity) : Intent {
        return SendLocationActivity.getIntent(activity)
     }
 

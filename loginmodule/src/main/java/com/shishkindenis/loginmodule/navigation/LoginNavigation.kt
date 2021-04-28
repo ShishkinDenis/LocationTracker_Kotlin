@@ -4,5 +4,5 @@ import android.app.Activity
 import android.content.Intent
 
 interface LoginNavigation {
-    fun finishLogin(activity: Activity) : Intent
+    fun getPostLoginActivity(activity: Activity) : Intent
 }

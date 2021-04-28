@@ -13,12 +13,15 @@ class LocationRepository {
     private val DATE_FIELD = "Date"
 
     fun readLocationFromRepository(): Task<QuerySnapshot>? {
+
         firestoreDataBase = FirebaseFirestore.getInstance()
         userId = FirebaseUserSingleton.getFirebaseAuth()?.currentUser?.uid
         date = DateSingleton.getDate()
 
+
         return firestoreDataBase?.collection(userId!!)
                 ?.whereEqualTo(DATE_FIELD, date)
                 ?.get()
+
     }
 }

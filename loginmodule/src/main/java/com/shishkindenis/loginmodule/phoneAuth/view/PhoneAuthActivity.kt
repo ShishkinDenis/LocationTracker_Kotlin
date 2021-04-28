@@ -64,7 +64,7 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
         })
 
         phoneAuthViewModel.applicationModule.observe(this, Observer {
-            startActivity(navigation.finishLogin(this))
+            startActivity(navigation.getPostLoginActivity(this))
             finish()
         })
         phoneAuthViewModel.code.observe(this, Observer {

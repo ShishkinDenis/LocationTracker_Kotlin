@@ -50,7 +50,7 @@ class EmailAuthActivity : DaggerAppCompatActivity() {
         })
 
         emailAuthViewModel.applicationModule.observe(this, Observer {
-            startActivity(navigation.finishLogin(this))
+            startActivity(navigation.getPostLoginActivity(this))
             finish()
         })
     }
