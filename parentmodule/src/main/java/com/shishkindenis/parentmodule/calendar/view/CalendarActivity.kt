@@ -51,7 +51,7 @@ class CalendarActivity : AppCompatActivity() {
             showAlertDialog()
         }
 
-        if (savedInstanceState != null) {
+        savedInstanceState?.let {
             restoreChosenDate(savedInstanceState)
         }
 

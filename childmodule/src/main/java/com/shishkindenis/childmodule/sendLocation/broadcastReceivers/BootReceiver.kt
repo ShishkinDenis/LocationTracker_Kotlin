@@ -14,7 +14,7 @@ class BootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser
-        if (user != null) {
+        user?.let {
             val myWorkRequest = OneTimeWorkRequest.Builder(LocationWorker::class.java).build()
             WorkManager.getInstance().enqueue(myWorkRequest)
         }

@@ -56,8 +56,7 @@ class PhoneAuthViewModel() : ViewModel() {
 
             override fun onCodeSent(
                     verificationId: String,
-                    token: PhoneAuthProvider.ForceResendingToken
-            ) {
+                    token: PhoneAuthProvider.ForceResendingToken) {
                 phoneVerificationId = verificationId
                 forceResendingToken = token
                 enableVerifyButton()

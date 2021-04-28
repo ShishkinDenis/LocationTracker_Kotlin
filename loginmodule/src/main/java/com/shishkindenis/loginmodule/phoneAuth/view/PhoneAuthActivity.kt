@@ -44,8 +44,7 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
             binding!!.pbPhoneAuth.visibility = View.VISIBLE
             if (codeIsValid()) {
                 phoneAuthViewModel.verifyPhoneNumberWithCode(
-                        binding!!.etVerificationCode.text.toString()
-                )
+                        binding!!.etVerificationCode.text.toString())
             } else {
                 setErrorIfInvalid()
             }

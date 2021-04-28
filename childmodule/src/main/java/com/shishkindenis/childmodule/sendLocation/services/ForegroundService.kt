@@ -44,15 +44,11 @@ class ForegroundService : Service() {
 
     private val mLocationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
-            if (locationResult != null) {
+            locationResult?.let {
                 getPosition(locationResult)
             }
             addData(locationMap)
-            Log.d(
-                    TAG,
-                    "TIME:" + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ENGLISH)
-                            .format(Date())
-            )
+            Log.d(TAG, "TIME:" + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ENGLISH).format(Date()))
         }
     }
 
@@ -60,7 +56,7 @@ class ForegroundService : Service() {
         super.onCreate()
         isGpsEnabled()
         user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser
-        if (user != null) {
+        user?.let {
             FirebaseUserSingleton.setUserId(user!!.uid)
             userId = FirebaseUserSingleton.getUserId()
         }
@@ -147,8 +143,7 @@ class ForegroundService : Service() {
         mFusedLocationClient.requestLocationUpdates(
                 mLocationRequest,
                 mLocationCallback,
-                Looper.myLooper()
-        )
+                Looper.myLooper())
     }
 
     private fun isNetworkConnected(): Boolean {

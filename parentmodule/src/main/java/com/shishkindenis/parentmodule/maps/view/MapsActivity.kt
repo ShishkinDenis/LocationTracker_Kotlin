@@ -67,8 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-        ) {
+                != PackageManager.PERMISSION_GRANTED) {
             return
         }
         map!!.isMyLocationEnabled = true
@@ -79,12 +78,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val someplace = LatLng(latitude!!, longitude!!)
         map!!.addMarker(MarkerOptions().position(someplace).title(time))
         map!!.moveCamera(CameraUpdateFactory.newLatLng(someplace))
-        map!!.addPolyline(
-                polylineOptions
-                        ?.color(Color.BLUE)
-                        ?.width(3f)
-                        ?.add(LatLng(latitude!!, longitude!!))
-        )
+        map!!.addPolyline(polylineOptions
+                ?.color(Color.BLUE)
+                ?.width(3f)
+                ?.add(LatLng(latitude!!, longitude!!)))
     }
 
     fun getPosition(document: QueryDocumentSnapshot?) {

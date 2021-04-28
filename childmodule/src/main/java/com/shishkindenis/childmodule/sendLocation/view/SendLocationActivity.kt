@@ -37,6 +37,7 @@ class SendLocationActivity : AppCompatActivity() {
     companion object {
         fun getIntent(context: Context) = Intent(context, SendLocationActivity::class.java)
     }
+
     val sendLocationViewModel: SendLocationViewModel by viewModels()
 
     private val PERMISSION_ID = 1
@@ -164,28 +165,20 @@ class SendLocationActivity : AppCompatActivity() {
     }
 
     fun requestIgnoringBatteryOptimizations() {
-        val intent = Intent(
-                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                Uri.parse("package:$packageName")
-        )
+        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName"))
         startActivity(intent)
     }
 
     fun checkPermissions(): Boolean {
-        return ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     fun isIgnoringBatteryOptimizationsPermissionGiven(): Boolean {
-        return ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-        ) == PackageManager.PERMISSION_GRANTED
+        return ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) == PackageManager.PERMISSION_GRANTED
     }
 
     fun isLocationEnabled(): Boolean {
@@ -252,8 +245,7 @@ class SendLocationActivity : AppCompatActivity() {
     inner class ConnectivityCallback : ConnectivityManager.NetworkCallback() {
         override fun onCapabilitiesChanged(
                 network: Network,
-                networkCapabilities: NetworkCapabilities
-        ) {
+                networkCapabilities: NetworkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities)
             val connected =
                     networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)

@@ -17,7 +17,7 @@ class MainLoginViewModel : ViewModel() {
 
     fun checkIfUserLoggedIn() {
         user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser
-        if (user != null) {
+        user?.let {
             goToApplicationModule()
         }
     }
