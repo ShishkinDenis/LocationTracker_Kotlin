@@ -37,7 +37,8 @@ class MainLoginActivity : DaggerAppCompatActivity() {
         binding!!.btnPhone.setOnClickListener { goToPhoneAuthActivity() }
 
         mainLoginViewModel.applicationModule.observe(this, Observer {
-            navigation.finishLogin(this)
+            startActivity(navigation.finishLogin(this))
+            finish()
         })
     }
 
