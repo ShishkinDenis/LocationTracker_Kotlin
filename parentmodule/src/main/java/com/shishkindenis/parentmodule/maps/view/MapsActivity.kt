@@ -65,9 +65,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isCompassEnabled = true
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
@@ -80,10 +80,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         map!!.addMarker(MarkerOptions().position(someplace).title(time))
         map!!.moveCamera(CameraUpdateFactory.newLatLng(someplace))
         map!!.addPolyline(
-            polylineOptions
-                ?.color(Color.BLUE)
-                ?.width(3f)
-                ?.add(LatLng(latitude!!, longitude!!))
+                polylineOptions
+                        ?.color(Color.BLUE)
+                        ?.width(3f)
+                        ?.add(LatLng(latitude!!, longitude!!))
         )
     }
 
@@ -100,7 +100,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun initMapsFragment() {
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment?
+                .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
 

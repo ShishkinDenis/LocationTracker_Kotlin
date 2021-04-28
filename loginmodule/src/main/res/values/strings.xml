@@ -35,7 +35,7 @@
     <string name="verify_code">Verify Code</string>
     <string name="request_code">Request Code</string>
     <string name="parent_edition">Parent edition</string>
-    <string name="send_location_activity">com.shishkindenis.childmodule.view.SendLocationActivity</string>
+    <string name="send_location_activity">com.shishkindenis.childmodule.sendLocation.view.SendLocationActivity</string>
     <string name="calendar_activity">com.shishkindenis.parentmodule.calendar.view.CalendarActivity</string>
     <string name="unknown">Unknown</string>
     <string name="child_module">ChildModule</string>

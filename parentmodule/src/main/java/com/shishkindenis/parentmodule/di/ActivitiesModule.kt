@@ -1,8 +1,8 @@
 package com.shishkindenis.parentmodule.di
 
 import com.shishkindenis.loginmodule.emailAuth.view.EmailAuthActivity
-import com.shishkindenis.loginmodule.view.MainLoginActivity
-import com.shishkindenis.loginmodule.view.PhoneAuthActivity
+import com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity
+import com.shishkindenis.loginmodule.phoneAuth.view.PhoneAuthActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

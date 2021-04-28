@@ -5,21 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import com.shishkindenis.loginmodule.singletons.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
-import com.shishkindenis.parentmodule.singletons.DateSingleton
+import com.shishkindenis.parentmodule.maps.data.LocationRepository
 
 
 class MapsViewModel : ViewModel() {
 
-    private val DATE_FIELD = "Date"
     private val TAG = "Location"
-    private var firestoreDataBase: FirebaseFirestore? = null
-    private var date: String? = null
-    private var userId: String? = null
+    val repository = LocationRepository()
 
     val backToCalendarActivityWithCancelledResult: LiveData<Any>
         get() = backToCalendarActivityWithCancelledResultLiveData
@@ -38,30 +33,23 @@ class MapsViewModel : ViewModel() {
     private val setTrackLiveData = SingleLiveEvent<Any>()
 
     fun readLocation() {
-        firestoreDataBase = FirebaseFirestore.getInstance()
-        userId = FirebaseUserSingleton.getFirebaseAuth()?.currentUser?.uid
-        date = DateSingleton.getDate()
-        firestoreDataBase?.collection(userId!!)
-            ?.whereEqualTo(DATE_FIELD, date)
-            ?.get()
-            ?.addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
-                if (task.isSuccessful) {
-                    if (task.result!!.isEmpty) {
-                        backToCalendarActivityWithCancelledResult()
-                    } else {
-                        for (document in task.result!!) {
-                            Log.d(TAG, document.id + " => " + document.data)
-                            backToCalendarActivityWithOkResult()
-                            getPosition(document)
-                            setTrack()
-                        }
-                    }
+        repository.readLocationFromRepository()?.addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
+            if (task.isSuccessful) {
+                if (task.result!!.isEmpty) {
+                    backToCalendarActivityWithCancelledResult()
                 } else {
-                    Log.w(TAG, "Error getting documents.", task.exception)
+                    for (document in task.result!!) {
+                        Log.d(TAG, document.id + " => " + document.data)
+                        backToCalendarActivityWithOkResult()
+                        getPosition(document)
+                        setTrack()
+                    }
                 }
-            })
+            } else {
+                Log.w(TAG, "Error getting documents.", task.exception)
+            }
+        })
     }
-
 
     fun backToCalendarActivityWithCancelledResult() {
         backToCalendarActivityWithCancelledResultLiveData.call()

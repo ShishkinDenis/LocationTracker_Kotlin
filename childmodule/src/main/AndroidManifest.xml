@@ -22,18 +22,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationTracker_Kotlin">
         <receiver
-            android:name=".broadcastReceivers.BootReceiver"
+            android:name="com.shishkindenis.childmodule.sendLocation.broadcastReceivers.BootReceiver"
             android:enabled="true"
             android:exported="true"></receiver>
 
         <service
-            android:name=".services.ForegroundService"
+            android:name="com.shishkindenis.childmodule.sendLocation.services.ForegroundService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".view.SendLocationActivity" />
+        <activity android:name="com.shishkindenis.childmodule.sendLocation.view.SendLocationActivity" />
 
-        <activity android:name="com.shishkindenis.loginmodule.view.MainLoginActivity">
+        <activity android:name="com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

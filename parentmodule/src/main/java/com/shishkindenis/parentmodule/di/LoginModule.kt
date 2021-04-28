@@ -1,7 +1,7 @@
 package com.shishkindenis.parentmodule.di
 
-import com.shishkindenis.loginmodule.LoginNavigation
-import com.shishkindenis.parentmodule.navigators.CalendarNavigation
+import com.shishkindenis.loginmodule.navigation.LoginNavigation
+import com.shishkindenis.parentmodule.calendar.navigator.CalendarNavigation
 import dagger.Binds
 import dagger.Module
 

@@ -15,7 +15,7 @@ import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.calendar.viewModel.CalendarViewModel
 import com.shishkindenis.parentmodule.databinding.ActivityCalendarBinding
 import com.shishkindenis.parentmodule.maps.view.MapsActivity
-import com.shishkindenis.parentmodule.singletons.DateSingleton
+import com.shishkindenis.parentmodule.singleton.DateSingleton
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -96,9 +96,9 @@ class CalendarActivity : AppCompatActivity() {
 
     fun showAlertDialog() {
         AlertDialog.Builder(this)
-            .setMessage(R.string.choose_the_date_of_tracking)
-            .setPositiveButton(R.string.ok) { dialog, which -> }
-            .show()
+                .setMessage(R.string.choose_the_date_of_tracking)
+                .setPositiveButton(R.string.ok) { dialog, which -> }
+                .show()
     }
 
     fun goToMapActivity() {

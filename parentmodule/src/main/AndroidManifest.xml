@@ -49,7 +49,7 @@
         -->
 
 
-        <activity android:name="com.shishkindenis.loginmodule.view.MainLoginActivity">
+        <activity android:name="com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

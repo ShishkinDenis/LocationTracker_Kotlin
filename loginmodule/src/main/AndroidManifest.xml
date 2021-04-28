@@ -4,9 +4,9 @@
 
     <application>
         <activity android:name=".view.BaseActivity"></activity>
-        <activity android:name=".view.PhoneAuthActivity" />
+        <activity android:name=".phoneAuth.view.PhoneAuthActivity" />
         <activity android:name=".emailAuth.view.EmailAuthActivity" />
-        <activity android:name=".view.MainLoginActivity" />
+        <activity android:name=".mainLogin.view.MainLoginActivity" />
     </application>
 
 </manifest>

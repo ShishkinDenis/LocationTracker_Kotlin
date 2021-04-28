@@ -5,10 +5,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.shishkindenis.loginmodule.LoginNavigation
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.databinding.ActivityEmailAuthBinding
-import com.shishkindenis.loginmodule.viewModels.EmailAuthViewModel
+import com.shishkindenis.loginmodule.emailAuth.viewModel.EmailAuthViewModel
+import com.shishkindenis.loginmodule.navigation.LoginNavigation
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
