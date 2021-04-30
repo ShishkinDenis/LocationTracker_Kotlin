@@ -19,9 +19,9 @@ class MainLoginActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var navigation: LoginNavigation
 
-    val mainLoginViewModel: MainLoginViewModel by viewModels()
+    private val mainLoginViewModel: MainLoginViewModel by viewModels()
 
-    private var binding: ActivityMainLoginBinding? = null
+    private lateinit var binding: ActivityMainLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +33,8 @@ class MainLoginActivity : DaggerAppCompatActivity() {
             mainLoginViewModel.checkIfUserLoggedIn()
         }
 
-        binding!!.btnEmail.setOnClickListener { goToEmailAuthActivity() }
-        binding!!.btnPhone.setOnClickListener { goToPhoneAuthActivity() }
+        binding.btnEmail.setOnClickListener { goToEmailAuthActivity() }
+        binding.btnPhone.setOnClickListener { goToPhoneAuthActivity() }
 
         mainLoginViewModel.applicationModule.observe(this, Observer {
             startActivity(navigation.getPostLoginActivity(this))
@@ -42,13 +42,13 @@ class MainLoginActivity : DaggerAppCompatActivity() {
         })
     }
 
-    fun goToEmailAuthActivity() {
+    private fun goToEmailAuthActivity() {
         val intent = Intent(this, EmailAuthActivity::class.java)
         finish()
         startActivity(intent)
     }
 
-    fun goToPhoneAuthActivity() {
+    private fun goToPhoneAuthActivity() {
         val intent = Intent(this, PhoneAuthActivity::class.java)
         finish()
         startActivity(intent)

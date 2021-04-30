@@ -14,7 +14,7 @@ import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
 
 
-class PhoneAuthViewModel() : ViewModel() {
+class PhoneAuthViewModel : ViewModel() {
 
     private var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
     private var phoneVerificationId: String? = null
@@ -80,6 +80,7 @@ class PhoneAuthViewModel() : ViewModel() {
                 }
     }
 
+//    TODO private
     fun verifyPhoneNumberWithCode(code: String?) {
         val credential = PhoneAuthProvider.getCredential(phoneVerificationId!!, code!!)
         signInWithPhoneAuthCredential(credential)
@@ -97,11 +98,11 @@ class PhoneAuthViewModel() : ViewModel() {
         phoneNumberErrorLiveData.call()
     }
 
-    fun goToApplicationModule() {
+    private fun goToApplicationModule() {
         applicationModuleLiveData.call()
     }
 
-    fun showInvalidCodeError() {
+    private fun showInvalidCodeError() {
         codeLiveData.call()
     }
 

@@ -17,7 +17,7 @@ class CalendarViewModel : ViewModel() {
         showToast(R.string.sign_out_successful)
     }
 
-    fun showToast(toastMessage: Int) {
+    private fun showToast(toastMessage: Int) {
         toastLiveData.value = toastMessage
     }
 }

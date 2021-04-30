@@ -3,7 +3,11 @@ package com.shishkindenis.loginmodule.singleton
 import com.google.firebase.auth.FirebaseAuth
 
 object FirebaseUserSingleton {
-    private val auth = FirebaseAuth.getInstance()
+
+    val auth by lazy {
+    FirebaseAuth.getInstance()
+    }
+
     private var userId: String? = null
 
     fun getUserId(): String? {

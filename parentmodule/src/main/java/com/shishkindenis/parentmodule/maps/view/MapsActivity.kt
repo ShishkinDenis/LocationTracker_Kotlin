@@ -21,21 +21,28 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.databinding.ActivityMapsBinding
 import com.shishkindenis.parentmodule.maps.viewModel.MapsViewModel
+import javax.inject.Inject
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-    val mapsViewModel: MapsViewModel by viewModels()
+
+
+    private val mapsViewModel: MapsViewModel by viewModels()
+
+//    @Inject
+//    lateinit var  mapsViewModel: MapsViewModel
 
     private val LONGITUDE_FIELD = "Longitude"
     private val LATITUDE_FIELD = "Latitude"
     private val TIME_FIELD = "Time"
     private var polylineOptions: PolylineOptions? = null
-    private var binding: ActivityMapsBinding? = null
-    private var map: GoogleMap? = null
+    private lateinit var binding: ActivityMapsBinding
+    private lateinit var map: GoogleMap
     private var longitude: Double? = null
     private var latitude: Double? = null
     private var time: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
 
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
@@ -60,48 +67,53 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         initMapsFragment()
     }
 
+
     override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map!!.uiSettings.isZoomControlsEnabled = true
-        map!!.uiSettings.isCompassEnabled = true
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return
+    map  = googleMap
+        with(map){
+            uiSettings.isZoomControlsEnabled = true
+            uiSettings.isCompassEnabled = true
+            isMyLocationEnabled = true
+            uiSettings.isMyLocationButtonEnabled = true
         }
-        map!!.isMyLocationEnabled = true
-        map!!.uiSettings.isMyLocationButtonEnabled = true
+
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+        return
+    }
     }
 
-    fun setTrack() {
+    private fun setTrack() {
         val someplace = LatLng(latitude!!, longitude!!)
-        map!!.addMarker(MarkerOptions().position(someplace).title(time))
-        map!!.moveCamera(CameraUpdateFactory.newLatLng(someplace))
-        map!!.addPolyline(polylineOptions
+    with(map){
+        addMarker(MarkerOptions().position(someplace).title(time))
+        moveCamera(CameraUpdateFactory.newLatLng(someplace))
+        addPolyline(polylineOptions
                 ?.color(Color.BLUE)
                 ?.width(3f)
                 ?.add(LatLng(latitude!!, longitude!!)))
     }
-
-    fun getPosition(document: QueryDocumentSnapshot?) {
-        longitude = document?.get(LONGITUDE_FIELD) as Double
-        latitude = document.get(LATITUDE_FIELD) as Double
-        time = document.get(TIME_FIELD) as String
     }
 
-    fun backToCalendarActivityWithCancelledResult() {
+    private fun getPosition(document: QueryDocumentSnapshot?) = with(document){
+        longitude = this?.get(LONGITUDE_FIELD) as Double
+        latitude = get(LATITUDE_FIELD) as Double
+        time = get(TIME_FIELD) as String
+    }
+
+    private fun backToCalendarActivityWithCancelledResult() {
         setResult(Activity.RESULT_CANCELED, null)
         finish()
     }
 
-    fun initMapsFragment() {
-        val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment?
+    private fun initMapsFragment() {
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
 
-    fun backToCalendarActivityWithOkResult() {
+    private fun backToCalendarActivityWithOkResult() {
         setResult(Activity.RESULT_OK, null)
     }
 }

@@ -15,7 +15,7 @@ class EmailAuthViewModel() : ViewModel() {
         get() = toastLiveData
     private val toastLiveData = SingleLiveEvent<Int>()
 
-    val toastwithEmail: LiveData<String>
+    val toastWithEmail: LiveData<String>
         get() = toastWithEmailLiveData
     private val toastWithEmailLiveData = SingleLiveEvent<String>()
 
@@ -46,15 +46,15 @@ class EmailAuthViewModel() : ViewModel() {
                 }
     }
 
-    fun showToast(toastMessage: Int) {
+    private fun showToast(toastMessage: Int) {
         toastLiveData.value = toastMessage
     }
 
-    fun showToastWithEmail(toastMessage: String) {
+    private fun showToastWithEmail(toastMessage: String) {
         toastWithEmailLiveData.value = toastMessage
     }
 
-    fun goToApplicationModule() {
+    private fun goToApplicationModule() {
         applicationModuleLiveData.call()
     }
 

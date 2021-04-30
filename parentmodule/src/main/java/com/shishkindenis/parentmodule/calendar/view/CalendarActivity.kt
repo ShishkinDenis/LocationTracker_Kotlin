@@ -11,63 +11,80 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.shishkindenis.parentmodule.InjectionExample
 import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.calendar.viewModel.CalendarViewModel
 import com.shishkindenis.parentmodule.databinding.ActivityCalendarBinding
+
 import com.shishkindenis.parentmodule.maps.view.MapsActivity
 import com.shishkindenis.parentmodule.singleton.DateSingleton
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class CalendarActivity : AppCompatActivity() {
+//    TODO Delete
+//    val injectionExample = InjectionExample()
+
+    @Inject
+    lateinit var injectionExample : InjectionExample
 
     companion object {
         fun getIntent(context: Context) = Intent(context, CalendarActivity::class.java)
     }
 
-    val calendarViewModel: CalendarViewModel by viewModels()
+    private val calendarViewModel: CalendarViewModel by viewModels()
 
-    val YEAR = "Year"
-    val MONTH = "Month"
-    val DAY = "Day"
-    val DATE_PATTERN = "yyyy-MM-dd"
-    var date: String? = null
-    var binding: ActivityCalendarBinding? = null
-    var calendar: Calendar? = null
-    var calendarYear = 0
-    var calendarMonth = 0
-    var calendarDay = 0
+    private val YEAR = "Year"
+    private val MONTH = "Month"
+    private val DAY = "Day"
+    private val DATE_PATTERN = "yyyy-MM-dd"
+    private var date: String? = null
+    private lateinit var binding: ActivityCalendarBinding
+    private lateinit var calendar: Calendar
+    private var calendarYear = 0
+    private var calendarMonth = 0
+    private var calendarDay = 0
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DaggerApplicationComponent
+                .builder()
+                .injectionExampleModule(InjectionExample(this))
+                .build()
+                .inject(this)
+
+        injectionExample.log()
+
+
         setContentView(R.layout.activity_calendar)
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         val calendarActivityView: View = binding!!.root
         setContentView(calendarActivityView)
         calendar = Calendar.getInstance()
-        setSupportActionBar(binding!!.toolbar)
-
-        if (savedInstanceState == null) {
-            showAlertDialog()
-        }
+        setSupportActionBar(binding.toolbar)
 
         savedInstanceState?.let {
             restoreChosenDate(savedInstanceState)
-        }
+        } ?: showAlertDialog()
 
-        binding!!.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+
+        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             calendarYear = year
             calendarMonth = month
             calendarDay = dayOfMonth
             calendar.let {
-                it?.set(calendarYear, calendarMonth, calendarDay)
+                it.set(calendarYear, calendarMonth, calendarDay)
             }
             val sdf = SimpleDateFormat(DATE_PATTERN)
-            date = sdf.format(calendar?.time)
+            date = sdf.format(calendar.time)
             date?.let { Log.d("LOCATION", it) }
             DateSingleton.setDate(date.toString())
         }
-        binding!!.btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
+        binding.btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
 
         calendarViewModel.toast.observe(this, androidx.lifecycle.Observer {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
@@ -77,9 +94,11 @@ class CalendarActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(YEAR, calendarYear)
-        outState.putInt(MONTH, calendarMonth)
-        outState.putInt(DAY, calendarDay)
+        with(outState){
+            putInt(YEAR, calendarYear)
+            putInt(MONTH, calendarMonth)
+            putInt(DAY, calendarDay)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,14 +113,14 @@ class CalendarActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showAlertDialog() {
+    private fun showAlertDialog() {
         AlertDialog.Builder(this)
                 .setMessage(R.string.choose_the_date_of_tracking)
                 .setPositiveButton(R.string.ok) { dialog, which -> }
                 .show()
     }
 
-    fun goToMapActivity() {
+    private fun goToMapActivity() {
         val intent = Intent(this, MapsActivity::class.java)
         startActivityForResult(intent, 5)
     }
@@ -113,19 +132,21 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
-    fun showToast(toastMessage: Int) {
+    private fun showToast(toastMessage: Int) {
         Toast.makeText(applicationContext, toastMessage, Toast.LENGTH_LONG).show()
     }
 
-    fun restoreChosenDate(savedInstanceState: Bundle) {
+    private fun restoreChosenDate(savedInstanceState: Bundle) {
         calendarYear = savedInstanceState.getInt(YEAR)
         calendarMonth = savedInstanceState.getInt(MONTH)
         calendarDay = savedInstanceState.getInt(DAY)
-        calendar!!.set(Calendar.YEAR, calendarYear)
-        calendar!!.set(Calendar.MONTH, calendarMonth)
-        calendar!!.set(Calendar.DATE, calendarDay)
-        val time = calendar!!.timeInMillis
-        binding?.calendarView?.date = time
+        with(calendar){
+            set(Calendar.YEAR, calendarYear)
+            set(Calendar.MONTH, calendarMonth)
+            set(Calendar.DATE, calendarDay)
+        }
+        val time = calendar.timeInMillis
+        binding.calendarView.date = time
     }
 
 }

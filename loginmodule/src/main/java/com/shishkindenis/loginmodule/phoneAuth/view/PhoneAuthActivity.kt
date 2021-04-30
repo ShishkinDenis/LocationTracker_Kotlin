@@ -21,34 +21,34 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var navigation: LoginNavigation
 
-    val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
+    private val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
 
-    private var binding: ActivityPhoneAuthBinding? = null
+    private lateinit var binding: ActivityPhoneAuthBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhoneAuthBinding.inflate(layoutInflater)
-        val view: View = binding!!.root
+        val view: View = binding.root
         setContentView(view)
 
-        binding!!.btnRequestCode.setOnClickListener {
-            binding!!.pbPhoneAuth.visibility = View.VISIBLE
+        binding.btnRequestCode.setOnClickListener {
+            binding.pbPhoneAuth.visibility = View.VISIBLE
             if (phoneNumberIsValid()) {
-                startPhoneNumberVerification(binding!!.etPhoneNumber.text.toString())
+                startPhoneNumberVerification(binding.etPhoneNumber.text.toString())
             } else {
                 setErrorIfInvalid()
             }
-            binding!!.pbPhoneAuth.visibility = View.INVISIBLE
+            binding.pbPhoneAuth.visibility = View.INVISIBLE
         }
-        binding!!.btnVerifyCode.setOnClickListener { v ->
-            binding!!.pbPhoneAuth.visibility = View.VISIBLE
+        binding.btnVerifyCode.setOnClickListener { v ->
+            binding.pbPhoneAuth.visibility = View.VISIBLE
             if (codeIsValid()) {
                 phoneAuthViewModel.verifyPhoneNumberWithCode(
-                        binding!!.etVerificationCode.text.toString())
+                        binding.etVerificationCode.text.toString())
             } else {
                 setErrorIfInvalid()
             }
-            binding!!.pbPhoneAuth.visibility = View.INVISIBLE
+            binding.pbPhoneAuth.visibility = View.INVISIBLE
         }
 
         phoneAuthViewModel.phoneVerificationCallback()
@@ -81,27 +81,27 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-    fun phoneNumberIsValid(): Boolean {
-        return binding?.etPhoneNumber?.text.toString().isNotEmpty()
+    private fun phoneNumberIsValid(): Boolean {
+        return binding.etPhoneNumber.text.toString().isNotEmpty()
     }
 
-    fun codeIsValid(): Boolean {
-        return binding?.etVerificationCode?.text.toString().isNotEmpty()
+    private fun codeIsValid(): Boolean {
+        return binding.etVerificationCode.text.toString().isNotEmpty()
     }
 
-    fun enableVerifyButton() {
-        binding!!.btnVerifyCode.isEnabled = true
+    private fun enableVerifyButton() {
+        binding.btnVerifyCode.isEnabled = true
     }
 
-    fun showInvalidPhoneNumberError() {
-        binding!!.etPhoneNumber.error = getString(R.string.invalid_phone_number)
+    private fun showInvalidPhoneNumberError() {
+        binding.etPhoneNumber.error = getString(R.string.invalid_phone_number)
     }
 
-    fun showInvalidCodeError() {
-        binding!!.etVerificationCode.error = getString(R.string.invalid_code)
+    private fun showInvalidCodeError() {
+        binding.etVerificationCode.error = getString(R.string.invalid_code)
     }
 
-    fun setErrorIfInvalid() {
+    private fun setErrorIfInvalid() {
         if (!phoneNumberIsValid()) {
             showInvalidPhoneNumberError()
         }

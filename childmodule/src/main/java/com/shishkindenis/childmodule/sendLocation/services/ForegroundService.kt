@@ -17,15 +17,24 @@ import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.shishkindenis.childmodule.R
+import com.shishkindenis.childmodule.di.DaggerApplicationComponent
+
 import com.shishkindenis.childmodule.sendLocation.data.LocationRepository
 import com.shishkindenis.childmodule.sendLocation.view.SendLocationActivity
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.HashMap
 
-
+//TODO инжектить в конструктор service ?
+//Написать inject component в OnCreate
+//Почитать Dagger startAndroid
+//Почитать про injection  в constructor
+//Или просто Inject Repository, который подтянет уже готовый с Firestore и singleton
+//https://developer.android.com/training/dependency-injection#java
+//https://developer.android.com/training/dependency-injection/dagger-android
 class ForegroundService : Service() {
 
     private val LONGITUDE_FIELD = "Longitude"
@@ -40,7 +49,15 @@ class ForegroundService : Service() {
     private var userId: String? = null
     private var time: String? = null
     private var user: FirebaseUser? = null
-    val repository = LocationRepository()
+
+//    private var firestoreDataBase : FirebaseFirestore? = FirebaseFirestore.getInstance()
+//    private var firebaseUserSingleton : FirebaseUserSingleton = FirebaseUserSingleton
+//    private val repository = LocationRepository(firestoreDataBase,firebaseUserSingleton)
+
+   @Inject
+   lateinit var  repository : LocationRepository
+
+
 
     private val mLocationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -53,6 +70,11 @@ class ForegroundService : Service() {
     }
 
     override fun onCreate() {
+    DaggerApplicationComponent
+            .builder()
+            .build()
+            .inject(this)
+
         super.onCreate()
         isGpsEnabled()
         user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser
@@ -95,57 +117,71 @@ class ForegroundService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                     CHANNEL_ID, "Foreground Service Channel",
-                    NotificationManager.IMPORTANCE_LOW
-            )
+                    NotificationManager.IMPORTANCE_LOW)
             serviceChannel.enableVibration(false)
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(serviceChannel)
         }
     }
 
+//    TODO private?
     fun getPosition(locationResult: LocationResult) {
         val mLastLocation: Location = locationResult.lastLocation
         val dateFormat: DateFormat = SimpleDateFormat(datePattern)
+//    TODO run
+
         time = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ENGLISH).format(Date())
-        locationMap.put(LATITUDE_FIELD, mLastLocation.latitude)
-        locationMap.put(LONGITUDE_FIELD, mLastLocation.longitude)
-        locationMap.put(DATE_FIELD, dateFormat.format(Date()))
-        locationMap.put(TIME_FIELD, time.toString())
-        Log.d("LOCATION", time.toString())
+
+    with(locationMap){
+        put(LATITUDE_FIELD, mLastLocation.latitude)
+        put(LONGITUDE_FIELD, mLastLocation.longitude)
+        put(DATE_FIELD, dateFormat.format(Date()))
+        put(TIME_FIELD, time.toString())
     }
 
+        Log.d("LOCATION", time.toString())
+    }
+    //    TODO private?
     fun addData(locationMap: MutableMap<String, Any>) {
-        repository.addDataToRepository(locationMap).addOnSuccessListener { documentReference: DocumentReference ->
-            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.id)
-        }
-                .addOnFailureListener { e: Exception? ->
+        repository
+                .addDataToRepository(locationMap)
+                ?.addOnSuccessListener { documentReference: DocumentReference ->
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.id)
+                }
+                ?.addOnFailureListener { e: Exception? ->
                     Log.w(TAG, "Error adding document", e)
                 }
     }
 
-    fun getLocation() {
+    private fun getLocation() {
         mFusedLocationClient?.let { requestNewLocationData(it) }
     }
 
+    //    TODO private?
     @SuppressLint("MissingPermission")
     fun requestNewLocationData(mFusedLocationClient: FusedLocationProviderClient) {
         val mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
 //        Set in final commit
-//        mLocationRequest.setSmallestDisplacement(60);
-//        mLocationRequest.setInterval(60000*10);
-//        mLocationRequest.setFastestInterval(60000*10);
 
-//        For testing
-        mLocationRequest.interval = 30000
-        mLocationRequest.fastestInterval = 30000
-        mFusedLocationClient.requestLocationUpdates(
-                mLocationRequest,
-                mLocationCallback,
-                Looper.myLooper())
+//        with(mLocationRequest){
+//            smallestDisplacement = 60F
+//            interval = 60000*10
+//            fastestInterval = 60000*10
+//        }
+
+        //        For testing
+
+        with(mLocationRequest){
+            interval = 30000
+            fastestInterval = 30000
+        }
+
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
     }
 
+//    TODO deprecated
     private fun isNetworkConnected(): Boolean {
         val connectivityManager =
                 getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -153,7 +189,7 @@ class ForegroundService : Service() {
                 .isConnected
     }
 
-    fun isGpsEnabled(): Boolean {
+    private fun isGpsEnabled(): Boolean {
         val locationManager =
                 applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)

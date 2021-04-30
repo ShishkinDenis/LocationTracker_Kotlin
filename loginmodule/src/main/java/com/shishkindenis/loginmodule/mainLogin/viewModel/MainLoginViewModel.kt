@@ -22,7 +22,7 @@ class MainLoginViewModel : ViewModel() {
         }
     }
 
-    fun goToApplicationModule() {
+    private fun goToApplicationModule() {
         applicationModuleLiveData.call()
     }
 

@@ -11,10 +11,15 @@ import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import com.shishkindenis.parentmodule.maps.data.LocationRepository
 
 
-class MapsViewModel : ViewModel() {
+class MapsViewModel  : ViewModel() {
+//class MapsViewModel @Inject constructor(var  repository : LocationRepository) : ViewModel() {
+//    Перенести в конструктор
+//    @Inject
+//    lateinit var  repository : LocationRepository
+    private val repository = LocationRepository()
 
     private val TAG = "Location"
-    val repository = LocationRepository()
+
 
     val backToCalendarActivityWithCancelledResult: LiveData<Any>
         get() = backToCalendarActivityWithCancelledResultLiveData
@@ -33,7 +38,14 @@ class MapsViewModel : ViewModel() {
     private val setTrackLiveData = SingleLiveEvent<Any>()
 
     fun readLocation() {
-        repository.readLocationFromRepository()?.addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
+//        DaggerApplicationComponent
+//                .builder()
+//                .locationRepositoryModule(LocationRepositoryModule(this))
+//                .build()
+//                .inject(this)
+
+
+        repository.readLocationFromRepository().addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
             if (task.isSuccessful) {
                 if (task.result!!.isEmpty) {
                     backToCalendarActivityWithCancelledResult()
@@ -51,19 +63,19 @@ class MapsViewModel : ViewModel() {
         })
     }
 
-    fun backToCalendarActivityWithCancelledResult() {
+    private fun backToCalendarActivityWithCancelledResult() {
         backToCalendarActivityWithCancelledResultLiveData.call()
     }
 
-    fun backToCalendarActivityWithOkResult() {
+    private fun backToCalendarActivityWithOkResult() {
         backToCalendarActivityWithOkResultLiveData.call()
     }
 
-    fun getPosition(document: QueryDocumentSnapshot?) {
+    private fun getPosition(document: QueryDocumentSnapshot?) {
         getPositionLiveData.value = document
     }
 
-    fun setTrack() {
+    private fun setTrack() {
         setTrackLiveData.call()
     }
 

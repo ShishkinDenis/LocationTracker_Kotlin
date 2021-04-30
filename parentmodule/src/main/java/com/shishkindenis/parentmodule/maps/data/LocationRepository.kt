@@ -5,6 +5,7 @@ import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.parentmodule.singleton.DateSingleton
 
 class LocationRepository {
+//class  LocationRepository @Inject constructor() {
     private var firestoreDataBase: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var date: String? = DateSingleton.getDate()
     private var userId: String? = FirebaseUserSingleton.getFirebaseAuth()?.currentUser?.uid

@@ -25,12 +25,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.shishkindenis.childmodule.R
 import com.shishkindenis.childmodule.databinding.ActivitySendLocationBinding
 import com.shishkindenis.childmodule.sendLocation.services.ForegroundService
 import com.shishkindenis.childmodule.sendLocation.viewModel.SendLocationViewModel
+import com.shishkindenis.childmodule.sendLocation.workers.LocationWorker
 
 class SendLocationActivity : AppCompatActivity() {
 
@@ -38,13 +41,13 @@ class SendLocationActivity : AppCompatActivity() {
         fun getIntent(context: Context) = Intent(context, SendLocationActivity::class.java)
     }
 
-    val sendLocationViewModel: SendLocationViewModel by viewModels()
+    private val sendLocationViewModel: SendLocationViewModel by viewModels()
 
     private val PERMISSION_ID = 1
     private var fusedLocationClient: FusedLocationProviderClient? = null
-    private var networkStatusOn = false
-    private var gpsStatusOn = false
-    private var binding: ActivitySendLocationBinding? = null
+    private var networkStateOn = false
+    private var gpsStateOn = false
+    private lateinit var binding: ActivitySendLocationBinding
 
     private val locationSwitchStateReceiver: BroadcastReceiver =
             object : BroadcastReceiver() {
@@ -56,16 +59,16 @@ class SendLocationActivity : AppCompatActivity() {
                                 locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                         if (isGpsEnabled) {
                             startService()
-                            binding?.tvGpsStatus?.setText(R.string.gps_status_on)
-                            binding?.tvProgress?.setText(R.string.location_determination_in_progress)
-                            gpsStatusOn = true
+                            binding.tvGpsStatus.setText(R.string.gps_status_on)
+                            binding.tvProgress.setText(R.string.location_determination_in_progress)
+                            gpsStateOn = true
                         } else {
-                            binding?.tvGpsStatus?.setText(R.string.gps_status_off)
-                            gpsStatusOn = false
+                            binding.tvGpsStatus.setText(R.string.gps_status_off)
+                            gpsStateOn = false
                             if (!isNetworkConnected()) {
                                 stopService()
                                 showAlertDialog()
-                                binding?.tvProgress?.setText(R.string.location_determination_off)
+                                binding.tvProgress.setText(R.string.location_determination_off)
                             }
                         }
                     }
@@ -75,15 +78,15 @@ class SendLocationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySendLocationBinding.inflate(layoutInflater)
-        val view: View = binding!!.root
+        val view: View = binding.root
         setContentView(view)
-        setSupportActionBar(binding!!.toolbar)
+        setSupportActionBar(binding.toolbar)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         checkIgnoringBatteryOptimizationsPermission()
         registerLocationSwitchStateReceiver()
         initConnectivityCallback()
-        setGpsStatus()
-        setNetworkStatus()
+        changeGpsStateIndicator()
+        changeNetworkStateIndicator()
         startLocationDetermination()
 
         sendLocationViewModel.toast.observe(this, Observer {
@@ -94,27 +97,27 @@ class SendLocationActivity : AppCompatActivity() {
         })
     }
 
-    fun checkIgnoringBatteryOptimizationsPermission() {
+    private fun checkIgnoringBatteryOptimizationsPermission() {
         if (!isIgnoringBatteryOptimizationsPermissionGiven()) {
             requestIgnoringBatteryOptimizations()
         }
     }
 
-    fun startLocationDetermination() {
-        if (!gpsStatusOn && !isNetworkConnected()) {
+    private fun startLocationDetermination() {
+        if (!gpsStateOn && !isNetworkConnected()) {
             showAlertDialog()
         } else {
             sendLocationToFirebase()
         }
     }
 
-    fun registerLocationSwitchStateReceiver() {
+    private fun registerLocationSwitchStateReceiver() {
         val filter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
         filter.addAction(Intent.ACTION_PROVIDER_CHANGED)
         this.registerReceiver(locationSwitchStateReceiver, filter)
     }
 
-    fun initConnectivityCallback() {
+    private fun initConnectivityCallback() {
         val connectivityManager =
                 getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager.registerDefaultNetworkCallback(ConnectivityCallback())
@@ -137,21 +140,17 @@ class SendLocationActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-                this, arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-        ), PERMISSION_ID
-        )
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_ID)
     }
 
-    fun showLocationSourceSettings() {
+    private fun showLocationSourceSettings() {
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(intent)
     }
 
-    fun showNetworkSettings() {
+    private fun showNetworkSettings() {
         val intent = Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)
         startActivity(intent)
     }
@@ -159,29 +158,29 @@ class SendLocationActivity : AppCompatActivity() {
     fun showAlertDialog() {
         AlertDialog.Builder(this)
                 .setMessage(R.string.location_determination_is_impossible)
-                .setPositiveButton(R.string.network, { dialog, which -> showNetworkSettings() })
-                .setNegativeButton(R.string.gps, { dialog, which -> showLocationSourceSettings() })
+                .setPositiveButton(R.string.network) { dialog, which -> showNetworkSettings() }
+                .setNegativeButton(R.string.gps) { dialog, which -> showLocationSourceSettings() }
                 .show()
     }
 
-    fun requestIgnoringBatteryOptimizations() {
+    private fun requestIgnoringBatteryOptimizations() {
         val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName"))
         startActivity(intent)
     }
 
-    fun checkPermissions(): Boolean {
+    private fun checkPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun isIgnoringBatteryOptimizationsPermissionGiven(): Boolean {
+    private fun isIgnoringBatteryOptimizationsPermissionGiven(): Boolean {
         return ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun isLocationEnabled(): Boolean {
+    private fun isLocationEnabled(): Boolean {
         val locationManager =
                 getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
@@ -196,34 +195,34 @@ class SendLocationActivity : AppCompatActivity() {
                 .isConnected
     }
 
-    fun setGpsStatus() {
+    private fun changeGpsStateIndicator() {
         val locationManager =
                 applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isGpsEnabled =
                 locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        gpsStatusOn = if (isGpsEnabled) {
-            binding?.tvGpsStatus?.setText(R.string.gps_status_on)
-            binding?.tvProgress?.setText(R.string.location_determination_in_progress)
+        gpsStateOn = if (isGpsEnabled) {
+            binding.tvGpsStatus.setText(R.string.gps_status_on)
+            binding.tvProgress.setText(R.string.location_determination_in_progress)
             true
         } else {
-            binding?.tvGpsStatus?.setText(R.string.gps_status_off)
+            binding.tvGpsStatus.setText(R.string.gps_status_off)
             false
         }
     }
 
-    fun setNetworkStatus() {
+    private fun changeNetworkStateIndicator() {
         if (isNetworkConnected()) {
-            binding?.tvNetworkStatus?.setText(R.string.network_status_on)
-            binding?.tvProgress?.setText(R.string.location_determination_in_progress)
+            binding.tvNetworkStatus.setText(R.string.network_status_on)
+            binding.tvProgress.setText(R.string.location_determination_in_progress)
         } else {
-            binding?.tvNetworkStatus?.setText(R.string.network_status_off)
+            binding.tvNetworkStatus.setText(R.string.network_status_off)
         }
     }
 
-    fun sendLocationToFirebase() {
+    private fun sendLocationToFirebase() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                sendLocationViewModel.startLocationWorker()
+                startLocationWorker()
             } else {
                 showToast(R.string.turn_on_determination_of_location)
                 showLocationSourceSettings()
@@ -233,12 +232,18 @@ class SendLocationActivity : AppCompatActivity() {
         }
     }
 
+    private fun startLocationWorker() {
+        val myWorkRequest =
+                OneTimeWorkRequest.Builder(LocationWorker::class.java).build()
+        WorkManager.getInstance(applicationContext).enqueue(myWorkRequest)
+    }
+
     fun stopService() {
         val serviceIntent = Intent(this, ForegroundService::class.java)
         stopService(serviceIntent)
     }
 
-    fun showToast(toastMessage: Int) {
+    private fun showToast(toastMessage: Int) {
         Toast.makeText(applicationContext, toastMessage, Toast.LENGTH_LONG).show()
     }
 
@@ -247,27 +252,28 @@ class SendLocationActivity : AppCompatActivity() {
                 network: Network,
                 networkCapabilities: NetworkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities)
+//            TODO
             val connected =
                     networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            networkStatusOn = true
+            networkStateOn = true
             startService()
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                binding?.tvNetworkStatus?.setText(R.string.network_status_on)
-                binding?.tvProgress?.setText(R.string.location_determination_in_progress)
+                binding.tvNetworkStatus.setText(R.string.network_status_on)
+                binding.tvProgress.setText(R.string.location_determination_in_progress)
             }
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
-            networkStatusOn = false
+            networkStateOn = false
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                binding?.tvNetworkStatus?.setText(R.string.network_status_off)
-                if (!gpsStatusOn) {
+                binding.tvNetworkStatus.setText(R.string.network_status_off)
+                if (!gpsStateOn) {
                     stopService()
                     showAlertDialog()
-                    binding?.tvProgress?.setText(R.string.location_determination_off)
+                    binding.tvProgress.setText(R.string.location_determination_off)
                 }
             }
         }
