@@ -1,5 +1,5 @@
 # LocationTracker_Kotlin
-Project consists of two applications («Child» and «Parent»).<br /> 
+Project consists of two application modules («Child» and «Parent»).<br /> 
 «Child» tracks location and sends coordinates to Firebase server.<br />
 «Parent» shows coordinates on the map.<br /> 
 Main objective of project – learning Kotlin, MVVM, LiveData, MultiModule navigation, Google Map API,<br />
