@@ -1,16 +1,10 @@
 package com.shishkindenis.parentmodule.maps.data
 
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.parentmodule.singleton.DateSingleton
 import javax.inject.Inject
 
-
-interface ILocationRepository {
-    fun readLocationFromRepository(): Task<QuerySnapshot>
-}
 
 class LocationRepository @Inject constructor(var firestoreDataBase: FirebaseFirestore,
                                              var dateSingleton: DateSingleton,

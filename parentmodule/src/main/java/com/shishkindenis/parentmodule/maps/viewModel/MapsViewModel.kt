@@ -8,10 +8,11 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
-import com.shishkindenis.parentmodule.maps.data.LocationRepository
+import com.shishkindenis.parentmodule.maps.data.ILocationRepository
 import javax.inject.Inject
 
-class MapsViewModel @Inject constructor(var repository: LocationRepository) : ViewModel() {
+
+class MapsViewModel @Inject constructor(var iRepository: ILocationRepository) : ViewModel() {
 
     private val TAG = "Location"
 
@@ -32,7 +33,7 @@ class MapsViewModel @Inject constructor(var repository: LocationRepository) : Vi
     private val setTrackLiveData = SingleLiveEvent<Any>()
 
     fun readLocation() {
-        repository.readLocationFromRepository().addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
+        iRepository.readLocationFromRepository().addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
             if (task.isSuccessful) {
                 if (task.result!!.isEmpty) {
                     backToCalendarActivityWithCancelledResult()

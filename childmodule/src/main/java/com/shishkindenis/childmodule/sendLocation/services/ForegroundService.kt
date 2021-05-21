@@ -20,7 +20,7 @@ import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.shishkindenis.childmodule.R
-import com.shishkindenis.childmodule.sendLocation.data.LocationRepository
+import com.shishkindenis.childmodule.sendLocation.data.ILocationRepository
 import com.shishkindenis.childmodule.sendLocation.view.SendLocationActivity
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import dagger.android.DaggerService
@@ -46,7 +46,7 @@ class ForegroundService : DaggerService() {
     private var user: FirebaseUser? = null
 
     @Inject
-    lateinit var repository: LocationRepository
+    lateinit var iRepository: ILocationRepository
 
     private val mLocationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -124,7 +124,7 @@ class ForegroundService : DaggerService() {
     }
 
     fun addData(locationMap: MutableMap<String, Any>) {
-        repository
+        iRepository
                 .addDataToRepository(locationMap)
                 ?.addOnSuccessListener { documentReference: DocumentReference ->
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.id)
