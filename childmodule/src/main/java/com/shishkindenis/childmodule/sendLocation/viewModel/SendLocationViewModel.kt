@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.shishkindenis.childmodule.R
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
+import javax.inject.Inject
 
 //TODO inject to ViewModel
-class SendLocationViewModel : ViewModel() {
+//class SendLocationViewModel : ViewModel() {
+class SendLocationViewModel @Inject constructor(var firebaseUserSingleton : FirebaseUserSingleton) : ViewModel() {
     val toast: LiveData<Int>
         get() = toastLiveData
     private val toastLiveData = SingleLiveEvent<Int>()
@@ -18,7 +20,8 @@ class SendLocationViewModel : ViewModel() {
 
     fun signOut() {
         stopService()
-        FirebaseUserSingleton.getFirebaseAuth()?.signOut()
+//        FirebaseUserSingleton.getFirebaseAuth()?.signOut()
+        firebaseUserSingleton.getFirebaseAuth()?.signOut()
         showToast(R.string.sign_out_successful)
     }
 

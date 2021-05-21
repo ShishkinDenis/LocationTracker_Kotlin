@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
+import javax.inject.Inject
 
 
-class MainLoginViewModel : ViewModel() {
+//class MainLoginViewModel : ViewModel() {
+class MainLoginViewModel @Inject constructor (var firebaseUserSingleton : FirebaseUserSingleton) : ViewModel() {
 
     private var user: FirebaseUser? = null
 
@@ -16,7 +18,8 @@ class MainLoginViewModel : ViewModel() {
     private val applicationModuleLiveData = SingleLiveEvent<Any>()
 
     fun checkIfUserLoggedIn() {
-        user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser
+//        user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser
+        user = firebaseUserSingleton.getFirebaseAuth()?.currentUser
         user?.let {
             goToApplicationModule()
         }

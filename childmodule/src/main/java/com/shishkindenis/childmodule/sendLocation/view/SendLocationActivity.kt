@@ -19,9 +19,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -34,14 +32,20 @@ import com.shishkindenis.childmodule.databinding.ActivitySendLocationBinding
 import com.shishkindenis.childmodule.sendLocation.services.ForegroundService
 import com.shishkindenis.childmodule.sendLocation.viewModel.SendLocationViewModel
 import com.shishkindenis.childmodule.sendLocation.workers.LocationWorker
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-class SendLocationActivity : AppCompatActivity() {
+//class SendLocationActivity : AppCompatActivity() {
+class SendLocationActivity : DaggerAppCompatActivity() {
 
     companion object {
         fun getIntent(context: Context) = Intent(context, SendLocationActivity::class.java)
     }
 
-    private val sendLocationViewModel: SendLocationViewModel by viewModels()
+    @Inject
+    lateinit var  sendLocationViewModel : SendLocationViewModel
+
+//    private val sendLocationViewModel: SendLocationViewModel by viewModels()
 
     private val PERMISSION_ID = 1
     private var fusedLocationClient: FusedLocationProviderClient? = null

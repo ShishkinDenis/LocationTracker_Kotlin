@@ -12,9 +12,11 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
+import javax.inject.Inject
 
 
-class PhoneAuthViewModel : ViewModel() {
+//class PhoneAuthViewModel  : ViewModel() {
+class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton : FirebaseUserSingleton) : ViewModel() {
 
     private var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
     private var phoneVerificationId: String? = null
@@ -66,7 +68,8 @@ class PhoneAuthViewModel : ViewModel() {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        FirebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
+//        FirebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
+        firebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
                 ?.addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
                         showToast(R.string.authentication_successful)

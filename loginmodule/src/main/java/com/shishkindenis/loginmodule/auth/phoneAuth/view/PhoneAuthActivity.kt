@@ -3,14 +3,13 @@ package com.shishkindenis.loginmodule.auth.phoneAuth.view
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.shishkindenis.loginmodule.R
+import com.shishkindenis.loginmodule.auth.phoneAuth.viewModel.PhoneAuthViewModel
 import com.shishkindenis.loginmodule.databinding.ActivityPhoneAuthBinding
 import com.shishkindenis.loginmodule.navigation.LoginNavigation
-import com.shishkindenis.loginmodule.auth.phoneAuth.viewModel.PhoneAuthViewModel
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import dagger.android.support.DaggerAppCompatActivity
 import java.util.concurrent.TimeUnit
@@ -21,7 +20,9 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var navigation: LoginNavigation
 
-    private val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
+    @Inject
+    lateinit var phoneAuthViewModel : PhoneAuthViewModel
+//    private val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
 
     private lateinit var binding: ActivityPhoneAuthBinding
 

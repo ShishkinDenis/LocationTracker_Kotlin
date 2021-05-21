@@ -1,7 +1,10 @@
 package com.shishkindenis.childmodule.sendLocation.services
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.location.Location
@@ -16,18 +19,20 @@ import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.shishkindenis.childmodule.R
 import com.shishkindenis.childmodule.sendLocation.data.LocationRepository
 import com.shishkindenis.childmodule.sendLocation.view.SendLocationActivity
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
+import dagger.android.DaggerService
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.HashMap
 
 
-class ForegroundService : Service() {
+//class ForegroundService : Service() {
+class ForegroundService : DaggerService() {
 
     private val LONGITUDE_FIELD = "Longitude"
     private val LATITUDE_FIELD = "Latitude"
@@ -42,12 +47,13 @@ class ForegroundService : Service() {
     private var time: String? = null
     private var user: FirebaseUser? = null
 
-    private var firestoreDataBase : FirebaseFirestore? = FirebaseFirestore.getInstance()
-    private var firebaseUserSingleton : FirebaseUserSingleton = FirebaseUserSingleton
-    private val repository = LocationRepository(firestoreDataBase,firebaseUserSingleton)
 
-//   @Inject
-//   lateinit var  repository : LocationRepository
+//    private var firestoreDataBase : FirebaseFirestore? = FirebaseFirestore.getInstance()
+//    private var firebaseUserSingleton : FirebaseUserSingleton = FirebaseUserSingleton
+//    private val repository = LocationRepository(firestoreDataBase,firebaseUserSingleton)
+
+   @Inject
+   lateinit var  repository : LocationRepository
 
 
 
@@ -149,7 +155,7 @@ class ForegroundService : Service() {
     fun requestNewLocationData(mFusedLocationClient: FusedLocationProviderClient) {
         val mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
+//TODO
 //        Set in final commit
 
 //        with(mLocationRequest){

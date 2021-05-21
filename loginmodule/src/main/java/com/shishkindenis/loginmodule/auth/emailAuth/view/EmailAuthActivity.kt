@@ -3,11 +3,10 @@ package com.shishkindenis.loginmodule.auth.emailAuth.view
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.shishkindenis.loginmodule.R
-import com.shishkindenis.loginmodule.databinding.ActivityEmailAuthBinding
 import com.shishkindenis.loginmodule.auth.emailAuth.viewModel.EmailAuthViewModel
+import com.shishkindenis.loginmodule.databinding.ActivityEmailAuthBinding
 import com.shishkindenis.loginmodule.navigation.LoginNavigation
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -17,7 +16,9 @@ class EmailAuthActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var navigation: LoginNavigation
 
-    private val emailAuthViewModel: EmailAuthViewModel by viewModels()
+    @Inject
+    lateinit var  emailAuthViewModel: EmailAuthViewModel
+//    private val emailAuthViewModel: EmailAuthViewModel by viewModels()
 
     private lateinit var binding: ActivityEmailAuthBinding
 
