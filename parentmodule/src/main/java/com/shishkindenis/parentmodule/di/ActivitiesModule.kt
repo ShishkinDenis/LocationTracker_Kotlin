@@ -3,6 +3,8 @@ package com.shishkindenis.parentmodule.di
 import com.shishkindenis.loginmodule.auth.emailAuth.view.EmailAuthActivity
 import com.shishkindenis.loginmodule.auth.phoneAuth.view.PhoneAuthActivity
 import com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity
+import com.shishkindenis.parentmodule.calendar.view.CalendarActivity
+import com.shishkindenis.parentmodule.maps.view.MapsActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -22,7 +24,11 @@ interface ActivitiesModule {
     @ActivityScope
     fun providePhoneAuthActivity(): PhoneAuthActivity
 
-//TODO : Calendar + Map
+    @ContributesAndroidInjector()
+    fun provideCalendarActivity(): CalendarActivity
+
+    @ContributesAndroidInjector
+    fun provideMapActivity(): MapsActivity
 
 }
 

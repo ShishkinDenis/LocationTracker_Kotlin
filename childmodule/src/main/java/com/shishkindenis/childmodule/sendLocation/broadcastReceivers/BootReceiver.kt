@@ -10,15 +10,10 @@ import com.shishkindenis.childmodule.sendLocation.workers.LocationWorker
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 
 class BootReceiver : BroadcastReceiver() {
-//class BootReceiver : DaggerBroadcastReceiver() {
-//    @Inject
-//    lateinit var firebaseUserSingleton: FirebaseUserSingleton
     private var user: FirebaseUser? = null
 
     override fun onReceive(context: Context, intent: Intent) {
-//        super.onReceive(context, intent)
         user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser?.also {
-//        user = firebaseUserSingleton.getFirebaseAuth()?.currentUser?.also {
             val myWorkRequest = OneTimeWorkRequest.Builder(LocationWorker::class.java).build()
             WorkManager.getInstance(context).enqueue(myWorkRequest)
         }

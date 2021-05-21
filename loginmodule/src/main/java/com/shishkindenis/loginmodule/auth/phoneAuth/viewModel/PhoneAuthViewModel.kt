@@ -14,9 +14,7 @@ import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import javax.inject.Inject
 
-
-//class PhoneAuthViewModel  : ViewModel() {
-class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton : FirebaseUserSingleton) : ViewModel() {
+class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton: FirebaseUserSingleton) : ViewModel() {
 
     private var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
     private var phoneVerificationId: String? = null
@@ -68,7 +66,6 @@ class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton : Firebas
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-//        FirebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
         firebaseUserSingleton.getFirebaseAuth()?.signInWithCredential(credential)
                 ?.addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
@@ -83,7 +80,6 @@ class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton : Firebas
                 }
     }
 
-//    TODO private
     fun verifyPhoneNumberWithCode(code: String?) {
         val credential = PhoneAuthProvider.getCredential(phoneVerificationId!!, code!!)
         signInWithPhoneAuthCredential(credential)

@@ -11,24 +11,9 @@ import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import com.shishkindenis.parentmodule.maps.data.LocationRepository
 import javax.inject.Inject
 
-
-//class MapsViewModel  : ViewModel() {
-
-//TODO delete example
-//class MapsViewModel @Inject constructor( var injectionExample : InjectionExample, var repository: LocationRepository) : ViewModel() {
 class MapsViewModel @Inject constructor(var repository: LocationRepository) : ViewModel() {
-//class MapsViewModel @Inject constructor(var  repository : LocationRepository) : ViewModel() {
-//    Перенести в конструктор
-//    @Inject
-//    lateinit var  repository : LocationRepository
-
-//    @Inject
-//    lateinit var injectionExample : InjectionExample
-
-//    private val repository = LocationRepository()
 
     private val TAG = "Location"
-
 
     val backToCalendarActivityWithCancelledResult: LiveData<Any>
         get() = backToCalendarActivityWithCancelledResultLiveData
@@ -47,10 +32,6 @@ class MapsViewModel @Inject constructor(var repository: LocationRepository) : Vi
     private val setTrackLiveData = SingleLiveEvent<Any>()
 
     fun readLocation() {
-//        TODO delete
-//        injectionExample.log()
-
-
         repository.readLocationFromRepository().addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
             if (task.isSuccessful) {
                 if (task.result!!.isEmpty) {

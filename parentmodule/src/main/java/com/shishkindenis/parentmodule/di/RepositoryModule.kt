@@ -9,22 +9,20 @@ import dagger.Provides
 @Module
 class RepositoryModule {
     var firestoreDataBase: FirebaseFirestore = FirebaseFirestore.getInstance()
-    @Provides
-    fun provideFirebase(): FirebaseFirestore{
-        return  firestoreDataBase
-    }
-
-
-
 
     @Provides
-    fun provideDateSingleton(): DateSingleton{
-        return  DateSingleton
+    fun provideFirebase(): FirebaseFirestore {
+        return firestoreDataBase
     }
 
     @Provides
-    fun provideFirebaseUserSingleton(): FirebaseUserSingleton{
-        return  FirebaseUserSingleton
+    fun provideDateSingleton(): DateSingleton {
+        return DateSingleton
+    }
+
+    @Provides
+    fun provideFirebaseUserSingleton(): FirebaseUserSingleton {
+        return FirebaseUserSingleton
     }
 
 }

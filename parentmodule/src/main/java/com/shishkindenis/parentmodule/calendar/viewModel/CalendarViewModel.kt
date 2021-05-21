@@ -7,16 +7,13 @@ import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import com.shishkindenis.parentmodule.R
 import javax.inject.Inject
 
-//class CalendarViewModel : ViewModel() {
-class CalendarViewModel @Inject constructor(var firebaseUserSingleton : FirebaseUserSingleton) : ViewModel() {
+class CalendarViewModel @Inject constructor(var firebaseUserSingleton: FirebaseUserSingleton) : ViewModel() {
 
     val toast: LiveData<Int>
         get() = toastLiveData
     private val toastLiveData = SingleLiveEvent<Int>()
 
     fun signOut() {
-
-//        FirebaseUserSingleton.getFirebaseAuth()?.signOut()
         firebaseUserSingleton.getFirebaseAuth()?.signOut()
         showToast(R.string.sign_out_successful)
     }

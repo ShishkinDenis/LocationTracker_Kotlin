@@ -19,24 +19,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-//class CalendarActivity : AppCompatActivity() {
 class CalendarActivity : DaggerAppCompatActivity() {
-
-
-//    @Inject
-//    lateinit var injectionExample : InjectionExample
-
 
     companion object {
         fun getIntent(context: Context) = Intent(context, CalendarActivity::class.java)
     }
 
     @Inject
-    lateinit var  calendarViewModel : CalendarViewModel
-
-//    private val calendarViewModel: CalendarViewModel by viewModels()
-
-
+    lateinit var calendarViewModel: CalendarViewModel
 
     private val YEAR = "Year"
     private val MONTH = "Month"
@@ -49,20 +39,8 @@ class CalendarActivity : DaggerAppCompatActivity() {
     private var calendarMonth = 0
     private var calendarDay = 0
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        DaggerApplicationComponent
-//                .builder()
-//                .injectionExampleModule(InjectionExample(this))
-//                .build()
-//                .inject(this)
-
-//        injectionExample.log()
-
-
         setContentView(R.layout.activity_calendar)
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         val calendarActivityView: View = binding!!.root
@@ -73,7 +51,6 @@ class CalendarActivity : DaggerAppCompatActivity() {
         savedInstanceState?.let {
             restoreChosenDate(savedInstanceState)
         } ?: showAlertDialog()
-
 
         binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             calendarYear = year
@@ -97,7 +74,7 @@ class CalendarActivity : DaggerAppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        with(outState){
+        with(outState) {
             putInt(YEAR, calendarYear)
             putInt(MONTH, calendarMonth)
             putInt(DAY, calendarDay)
@@ -143,7 +120,7 @@ class CalendarActivity : DaggerAppCompatActivity() {
         calendarYear = savedInstanceState.getInt(YEAR)
         calendarMonth = savedInstanceState.getInt(MONTH)
         calendarDay = savedInstanceState.getInt(DAY)
-        with(calendar){
+        with(calendar) {
             set(Calendar.YEAR, calendarYear)
             set(Calendar.MONTH, calendarMonth)
             set(Calendar.DATE, calendarDay)

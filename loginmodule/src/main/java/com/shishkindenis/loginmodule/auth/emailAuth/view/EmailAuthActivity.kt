@@ -17,8 +17,7 @@ class EmailAuthActivity : DaggerAppCompatActivity() {
     lateinit var navigation: LoginNavigation
 
     @Inject
-    lateinit var  emailAuthViewModel: EmailAuthViewModel
-//    private val emailAuthViewModel: EmailAuthViewModel by viewModels()
+    lateinit var emailAuthViewModel: EmailAuthViewModel
 
     private lateinit var binding: ActivityEmailAuthBinding
 

@@ -21,9 +21,7 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
     lateinit var navigation: LoginNavigation
 
     @Inject
-    lateinit var phoneAuthViewModel : PhoneAuthViewModel
-//    private val phoneAuthViewModel: PhoneAuthViewModel by viewModels()
-
+    lateinit var phoneAuthViewModel: PhoneAuthViewModel
     private lateinit var binding: ActivityPhoneAuthBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

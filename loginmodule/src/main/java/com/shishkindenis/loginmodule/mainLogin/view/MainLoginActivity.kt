@@ -19,9 +19,7 @@ class MainLoginActivity : DaggerAppCompatActivity() {
     lateinit var navigation: LoginNavigation
 
     @Inject
-    lateinit var mainLoginViewModel : MainLoginViewModel
-
-//    private val mainLoginViewModel: MainLoginViewModel by viewModels()
+    lateinit var mainLoginViewModel: MainLoginViewModel
 
     private lateinit var binding: ActivityMainLoginBinding
 

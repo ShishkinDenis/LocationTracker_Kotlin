@@ -22,14 +22,10 @@ import com.shishkindenis.parentmodule.maps.viewModel.MapsViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-//class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 class MapsActivity : DaggerAppCompatActivity(), OnMapReadyCallback {
 
-
-//    private val mapsViewModel: MapsViewModel by viewModels()
-
     @Inject
-    lateinit var  mapsViewModel: MapsViewModel
+    lateinit var mapsViewModel: MapsViewModel
 
     private val LONGITUDE_FIELD = "Longitude"
     private val LATITUDE_FIELD = "Latitude"
@@ -48,8 +44,6 @@ class MapsActivity : DaggerAppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         val view: View = binding!!.root
         setContentView(view)
-
-//        val viewModel: MapsViewModel = ViewModelProvider(this, MapsViewModelFactory(first))[FirstViewModel::class.java]
 
         mapsViewModel.backToCalendarActivityWithCancelledResult.observe(this, Observer {
             backToCalendarActivityWithCancelledResult()
@@ -71,35 +65,35 @@ class MapsActivity : DaggerAppCompatActivity(), OnMapReadyCallback {
 
 
     override fun onMapReady(googleMap: GoogleMap) {
-    map  = googleMap
-        with(map){
+        map = googleMap
+        with(map) {
             uiSettings.isZoomControlsEnabled = true
             uiSettings.isCompassEnabled = true
             isMyLocationEnabled = true
             uiSettings.isMyLocationButtonEnabled = true
         }
 
-    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-        return
-    }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
     }
 
     private fun setTrack() {
         val someplace = LatLng(latitude!!, longitude!!)
-    with(map){
-        addMarker(MarkerOptions().position(someplace).title(time))
-        moveCamera(CameraUpdateFactory.newLatLng(someplace))
-        addPolyline(polylineOptions
-                ?.color(Color.BLUE)
-                ?.width(3f)
-                ?.add(LatLng(latitude!!, longitude!!)))
-    }
+        with(map) {
+            addMarker(MarkerOptions().position(someplace).title(time))
+            moveCamera(CameraUpdateFactory.newLatLng(someplace))
+            addPolyline(polylineOptions
+                    ?.color(Color.BLUE)
+                    ?.width(3f)
+                    ?.add(LatLng(latitude!!, longitude!!)))
+        }
     }
 
-    private fun getPosition(document: QueryDocumentSnapshot?) = with(document){
+    private fun getPosition(document: QueryDocumentSnapshot?) = with(document) {
         longitude = this?.get(LONGITUDE_FIELD) as Double
         latitude = get(LATITUDE_FIELD) as Double
         time = get(TIME_FIELD) as String

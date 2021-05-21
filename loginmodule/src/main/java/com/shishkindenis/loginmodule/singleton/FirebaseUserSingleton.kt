@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 object FirebaseUserSingleton {
 
     val auth by lazy {
-    FirebaseAuth.getInstance()
+        FirebaseAuth.getInstance()
     }
 
     private var userId: String? = null

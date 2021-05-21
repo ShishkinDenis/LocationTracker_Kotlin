@@ -4,10 +4,7 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 
-
-//@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, CalendarModule::class])
-//@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, CalendarModule::class, MapActivityModule::class])
-@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, CalendarModule::class, MapActivityModule::class,RepositoryModule::class])
+@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, RepositoryModule::class])
 
 interface ApplicationComponent : AndroidInjector<MyApplication> {
 
@@ -17,7 +14,6 @@ interface ApplicationComponent : AndroidInjector<MyApplication> {
         abstract override fun build(): ApplicationComponent
     }
 
-//    fun inject(mapsViewModel: MapsViewModel)
 
 }
 

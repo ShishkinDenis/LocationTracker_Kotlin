@@ -35,7 +35,6 @@ import com.shishkindenis.childmodule.sendLocation.workers.LocationWorker
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-//class SendLocationActivity : AppCompatActivity() {
 class SendLocationActivity : DaggerAppCompatActivity() {
 
     companion object {
@@ -43,9 +42,7 @@ class SendLocationActivity : DaggerAppCompatActivity() {
     }
 
     @Inject
-    lateinit var  sendLocationViewModel : SendLocationViewModel
-
-//    private val sendLocationViewModel: SendLocationViewModel by viewModels()
+    lateinit var sendLocationViewModel: SendLocationViewModel
 
     private val PERMISSION_ID = 1
     private var fusedLocationClient: FusedLocationProviderClient? = null
@@ -256,7 +253,6 @@ class SendLocationActivity : DaggerAppCompatActivity() {
                 network: Network,
                 networkCapabilities: NetworkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities)
-//            TODO
             val connected =
                     networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             networkStateOn = true

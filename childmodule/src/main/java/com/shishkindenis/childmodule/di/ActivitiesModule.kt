@@ -1,8 +1,9 @@
 package com.shishkindenis.childmodule.di
 
+import com.shishkindenis.childmodule.sendLocation.view.SendLocationActivity
 import com.shishkindenis.loginmodule.auth.emailAuth.view.EmailAuthActivity
-import com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity
 import com.shishkindenis.loginmodule.auth.phoneAuth.view.PhoneAuthActivity
+import com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -21,6 +22,9 @@ interface ActivitiesModule {
     @ContributesAndroidInjector(modules = [LoginModule::class])
     @ActivityScope
     fun providePhoneAuthActivity(): PhoneAuthActivity
+
+    @ContributesAndroidInjector()
+    fun provideSendLocationActivity(): SendLocationActivity
 
 }
 

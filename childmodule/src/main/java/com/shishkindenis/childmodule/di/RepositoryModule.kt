@@ -9,14 +9,15 @@ import dagger.Provides
 @Module
 class RepositoryModule {
     var firestoreDataBase: FirebaseFirestore = FirebaseFirestore.getInstance()
+
     @Provides
-    fun provideFirebase(): FirebaseFirestore{
-        return  firestoreDataBase
+    fun provideFirebase(): FirebaseFirestore {
+        return firestoreDataBase
     }
 
     @Provides
     fun provideFirebaseUserSingleton(): FirebaseUserSingleton {
-        return  FirebaseUserSingleton
+        return FirebaseUserSingleton
     }
 
 }

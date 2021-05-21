@@ -9,9 +9,7 @@ import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import javax.inject.Inject
 
-
-//class EmailAuthViewModel() : ViewModel() {
-class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton : FirebaseUserSingleton) : ViewModel() {
+class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton: FirebaseUserSingleton) : ViewModel() {
 
     val toast: LiveData<Int>
         get() = toastLiveData
@@ -26,7 +24,6 @@ class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton : Firebas
     private val applicationModuleLiveData = SingleLiveEvent<Any>()
 
     fun createAccount(email: String, password: String?) {
-//        FirebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password)
         firebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {
@@ -38,7 +35,6 @@ class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton : Firebas
     }
 
     fun signIn(email: String, password: String) {
-//        FirebaseUserSingleton.getFirebaseAuth()?.signInWithEmailAndPassword(email, password)
         firebaseUserSingleton.getFirebaseAuth()?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {

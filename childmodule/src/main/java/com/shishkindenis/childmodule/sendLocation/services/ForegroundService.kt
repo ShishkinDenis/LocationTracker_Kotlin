@@ -30,8 +30,6 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
-
-//class ForegroundService : Service() {
 class ForegroundService : DaggerService() {
 
     private val LONGITUDE_FIELD = "Longitude"
@@ -47,15 +45,8 @@ class ForegroundService : DaggerService() {
     private var time: String? = null
     private var user: FirebaseUser? = null
 
-
-//    private var firestoreDataBase : FirebaseFirestore? = FirebaseFirestore.getInstance()
-//    private var firebaseUserSingleton : FirebaseUserSingleton = FirebaseUserSingleton
-//    private val repository = LocationRepository(firestoreDataBase,firebaseUserSingleton)
-
-   @Inject
-   lateinit var  repository : LocationRepository
-
-
+    @Inject
+    lateinit var repository: LocationRepository
 
     private val mLocationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -117,24 +108,21 @@ class ForegroundService : DaggerService() {
         }
     }
 
-//    TODO private?
     fun getPosition(locationResult: LocationResult) {
         val mLastLocation: Location = locationResult.lastLocation
         val dateFormat: DateFormat = SimpleDateFormat(datePattern)
-//    TODO run
-
         time = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ENGLISH).format(Date())
 
-    with(locationMap){
-        put(LATITUDE_FIELD, mLastLocation.latitude)
-        put(LONGITUDE_FIELD, mLastLocation.longitude)
-        put(DATE_FIELD, dateFormat.format(Date()))
-        put(TIME_FIELD, time.toString())
-    }
+        with(locationMap) {
+            put(LATITUDE_FIELD, mLastLocation.latitude)
+            put(LONGITUDE_FIELD, mLastLocation.longitude)
+            put(DATE_FIELD, dateFormat.format(Date()))
+            put(TIME_FIELD, time.toString())
+        }
 
         Log.d("LOCATION", time.toString())
     }
-    //    TODO private?
+
     fun addData(locationMap: MutableMap<String, Any>) {
         repository
                 .addDataToRepository(locationMap)
@@ -150,13 +138,12 @@ class ForegroundService : DaggerService() {
         mFusedLocationClient?.let { requestNewLocationData(it) }
     }
 
-    //    TODO private?
     @SuppressLint("MissingPermission")
     fun requestNewLocationData(mFusedLocationClient: FusedLocationProviderClient) {
         val mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-//TODO
-//        Set in final commit
+
+// TODO       Set in final commit
 
 //        with(mLocationRequest){
 //            smallestDisplacement = 60F
@@ -165,8 +152,7 @@ class ForegroundService : DaggerService() {
 //        }
 
         //        For testing
-
-        with(mLocationRequest){
+        with(mLocationRequest) {
             interval = 30000
             fastestInterval = 30000
         }
@@ -174,7 +160,6 @@ class ForegroundService : DaggerService() {
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
     }
 
-//    TODO deprecated
     private fun isNetworkConnected(): Boolean {
         val connectivityManager =
                 getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
