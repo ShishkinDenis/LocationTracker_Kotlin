@@ -1,4 +1,4 @@
-package com.shishkindenis.loginmodule.emailAuth.view
+package com.shishkindenis.loginmodule.auth.emailAuth.view
 
 import android.os.Bundle
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.databinding.ActivityEmailAuthBinding
-import com.shishkindenis.loginmodule.emailAuth.viewModel.EmailAuthViewModel
+import com.shishkindenis.loginmodule.auth.emailAuth.viewModel.EmailAuthViewModel
 import com.shishkindenis.loginmodule.navigation.LoginNavigation
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject

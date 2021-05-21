@@ -6,10 +6,9 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 
 
-@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, LocationRepositoryModule::class])
+@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class])
 interface ApplicationComponent : AndroidInjector<MyApplication> {
 
-//    TODO Component.Builder
     @Component.Builder
 
     abstract class Builder : AndroidInjector.Builder<MyApplication>() {

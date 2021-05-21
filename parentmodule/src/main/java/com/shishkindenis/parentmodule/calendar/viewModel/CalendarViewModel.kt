@@ -13,6 +13,7 @@ class CalendarViewModel : ViewModel() {
     private val toastLiveData = SingleLiveEvent<Int>()
 
     fun signOut() {
+
         FirebaseUserSingleton.getFirebaseAuth()?.signOut()
         showToast(R.string.sign_out_successful)
     }

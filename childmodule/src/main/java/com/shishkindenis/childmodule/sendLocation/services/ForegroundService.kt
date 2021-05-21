@@ -16,25 +16,17 @@ import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.shishkindenis.childmodule.R
-import com.shishkindenis.childmodule.di.DaggerApplicationComponent
-
 import com.shishkindenis.childmodule.sendLocation.data.LocationRepository
 import com.shishkindenis.childmodule.sendLocation.view.SendLocationActivity
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 import kotlin.collections.HashMap
 
-//TODO инжектить в конструктор service ?
-//Написать inject component в OnCreate
-//Почитать Dagger startAndroid
-//Почитать про injection  в constructor
-//Или просто Inject Repository, который подтянет уже готовый с Firestore и singleton
-//https://developer.android.com/training/dependency-injection#java
-//https://developer.android.com/training/dependency-injection/dagger-android
+
 class ForegroundService : Service() {
 
     private val LONGITUDE_FIELD = "Longitude"
@@ -50,12 +42,12 @@ class ForegroundService : Service() {
     private var time: String? = null
     private var user: FirebaseUser? = null
 
-//    private var firestoreDataBase : FirebaseFirestore? = FirebaseFirestore.getInstance()
-//    private var firebaseUserSingleton : FirebaseUserSingleton = FirebaseUserSingleton
-//    private val repository = LocationRepository(firestoreDataBase,firebaseUserSingleton)
+    private var firestoreDataBase : FirebaseFirestore? = FirebaseFirestore.getInstance()
+    private var firebaseUserSingleton : FirebaseUserSingleton = FirebaseUserSingleton
+    private val repository = LocationRepository(firestoreDataBase,firebaseUserSingleton)
 
-   @Inject
-   lateinit var  repository : LocationRepository
+//   @Inject
+//   lateinit var  repository : LocationRepository
 
 
 
@@ -70,11 +62,6 @@ class ForegroundService : Service() {
     }
 
     override fun onCreate() {
-    DaggerApplicationComponent
-            .builder()
-            .build()
-            .inject(this)
-
         super.onCreate()
         isGpsEnabled()
         user = FirebaseUserSingleton.getFirebaseAuth()?.currentUser

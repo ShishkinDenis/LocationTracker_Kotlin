@@ -1,4 +1,4 @@
-package com.shishkindenis.loginmodule.emailAuth.viewModel
+package com.shishkindenis.loginmodule.auth.emailAuth.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

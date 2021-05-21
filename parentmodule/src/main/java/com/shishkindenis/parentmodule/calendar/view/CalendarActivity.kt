@@ -10,24 +10,22 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import com.shishkindenis.parentmodule.InjectionExample
 import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.calendar.viewModel.CalendarViewModel
 import com.shishkindenis.parentmodule.databinding.ActivityCalendarBinding
-
 import com.shishkindenis.parentmodule.maps.view.MapsActivity
 import com.shishkindenis.parentmodule.singleton.DateSingleton
+import dagger.android.support.DaggerAppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
-class CalendarActivity : AppCompatActivity() {
-//    TODO Delete
-//    val injectionExample = InjectionExample()
+//class CalendarActivity : AppCompatActivity() {
+class CalendarActivity : DaggerAppCompatActivity() {
 
-    @Inject
-    lateinit var injectionExample : InjectionExample
+
+//    @Inject
+//    lateinit var injectionExample : InjectionExample
+
 
     companion object {
         fun getIntent(context: Context) = Intent(context, CalendarActivity::class.java)
@@ -51,13 +49,13 @@ class CalendarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DaggerApplicationComponent
-                .builder()
-                .injectionExampleModule(InjectionExample(this))
-                .build()
-                .inject(this)
+//        DaggerApplicationComponent
+//                .builder()
+//                .injectionExampleModule(InjectionExample(this))
+//                .build()
+//                .inject(this)
 
-        injectionExample.log()
+//        injectionExample.log()
 
 
         setContentView(R.layout.activity_calendar)

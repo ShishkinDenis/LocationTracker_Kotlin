@@ -1,13 +1,14 @@
 package com.shishkindenis.parentmodule.di
 
-import com.shishkindenis.parentmodule.calendar.view.CalendarActivity
+import com.shishkindenis.parentmodule.maps.viewModel.MapsViewModel
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 
 
-
-@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class,  InjectionExampleModule::class])
+//@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, CalendarModule::class])
+@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, CalendarModule::class, MapActivityModule::class])
+//@Component(modules = [AndroidSupportInjectionModule::class, ActivitiesModule::class, CalendarModule::class,RepositoryModule::class])
 interface ApplicationComponent : AndroidInjector<MyApplication> {
 
     @Component.Builder
@@ -16,6 +17,7 @@ interface ApplicationComponent : AndroidInjector<MyApplication> {
         abstract override fun build(): ApplicationComponent
     }
 
-    fun inject (calendarActivity: CalendarActivity)
+    fun inject(mapsViewModel: MapsViewModel)
+
 }
 

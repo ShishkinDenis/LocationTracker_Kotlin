@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,15 +22,18 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.databinding.ActivityMapsBinding
 import com.shishkindenis.parentmodule.maps.viewModel.MapsViewModel
+import com.shishkindenis.parentmodule.maps.viewModel.MapsViewModelFactory
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+//class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : DaggerAppCompatActivity(), OnMapReadyCallback {
 
 
-    private val mapsViewModel: MapsViewModel by viewModels()
+//    private val mapsViewModel: MapsViewModel by viewModels()
 
-//    @Inject
-//    lateinit var  mapsViewModel: MapsViewModel
+    @Inject
+    lateinit var  mapsViewModel: MapsViewModel
 
     private val LONGITUDE_FIELD = "Longitude"
     private val LATITUDE_FIELD = "Latitude"
@@ -48,6 +52,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         val view: View = binding!!.root
         setContentView(view)
+
+//        val viewModel: MapsViewModel = ViewModelProvider(this, MapsViewModelFactory(first))[FirstViewModel::class.java]
 
         mapsViewModel.backToCalendarActivityWithCancelledResult.observe(this, Observer {
             backToCalendarActivityWithCancelledResult()

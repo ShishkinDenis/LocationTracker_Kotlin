@@ -1,4 +1,4 @@
-package com.shishkindenis.loginmodule.phoneAuth.viewModel
+package com.shishkindenis.loginmodule.auth.phoneAuth.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

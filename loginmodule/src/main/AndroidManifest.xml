@@ -4,8 +4,8 @@
 
     <application>
         <activity android:name=".view.BaseActivity"></activity>
-        <activity android:name=".phoneAuth.view.PhoneAuthActivity" />
-        <activity android:name=".emailAuth.view.EmailAuthActivity" />
+        <activity android:name="com.shishkindenis.loginmodule.auth.phoneAuth.view.PhoneAuthActivity" />
+        <activity android:name="com.shishkindenis.loginmodule.auth.emailAuth.view.EmailAuthActivity" />
         <activity android:name=".mainLogin.view.MainLoginActivity" />
     </application>
 

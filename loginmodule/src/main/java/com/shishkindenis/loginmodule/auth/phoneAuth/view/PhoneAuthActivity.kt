@@ -1,4 +1,4 @@
-package com.shishkindenis.loginmodule.phoneAuth.view
+package com.shishkindenis.loginmodule.auth.phoneAuth.view
 
 import android.os.Bundle
 import android.view.View
@@ -10,7 +10,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.shishkindenis.loginmodule.R
 import com.shishkindenis.loginmodule.databinding.ActivityPhoneAuthBinding
 import com.shishkindenis.loginmodule.navigation.LoginNavigation
-import com.shishkindenis.loginmodule.phoneAuth.viewModel.PhoneAuthViewModel
+import com.shishkindenis.loginmodule.auth.phoneAuth.viewModel.PhoneAuthViewModel
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import dagger.android.support.DaggerAppCompatActivity
 import java.util.concurrent.TimeUnit
