@@ -9,7 +9,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import com.shishkindenis.parentmodule.R
 import com.shishkindenis.parentmodule.calendar.viewModel.CalendarViewModel
 import com.shishkindenis.parentmodule.databinding.ActivityCalendarBinding
@@ -18,6 +17,7 @@ import com.shishkindenis.parentmodule.singleton.DateSingleton
 import dagger.android.support.DaggerAppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 //class CalendarActivity : AppCompatActivity() {
 class CalendarActivity : DaggerAppCompatActivity() {
@@ -31,7 +31,12 @@ class CalendarActivity : DaggerAppCompatActivity() {
         fun getIntent(context: Context) = Intent(context, CalendarActivity::class.java)
     }
 
-    private val calendarViewModel: CalendarViewModel by viewModels()
+    @Inject
+    lateinit var  calendarViewModel : CalendarViewModel
+
+//    private val calendarViewModel: CalendarViewModel by viewModels()
+
+
 
     private val YEAR = "Year"
     private val MONTH = "Month"

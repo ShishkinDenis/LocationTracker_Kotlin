@@ -1,6 +1,6 @@
 package com.shishkindenis.parentmodule.singleton
 
-object DateSingleton {
+object  DateSingleton  {
     private var date: String? = null
 
     fun getDate(): String? {

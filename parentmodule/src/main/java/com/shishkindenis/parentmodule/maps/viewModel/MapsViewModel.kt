@@ -8,14 +8,15 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.shishkindenis.loginmodule.util.SingleLiveEvent
-import com.shishkindenis.parentmodule.InjectionExample
 import com.shishkindenis.parentmodule.maps.data.LocationRepository
 import javax.inject.Inject
 
 
 //class MapsViewModel  : ViewModel() {
 
-class MapsViewModel @Inject constructor( var injectionExample : InjectionExample) : ViewModel() {
+//TODO delete example
+//class MapsViewModel @Inject constructor( var injectionExample : InjectionExample, var repository: LocationRepository) : ViewModel() {
+class MapsViewModel @Inject constructor(var repository: LocationRepository) : ViewModel() {
 //class MapsViewModel @Inject constructor(var  repository : LocationRepository) : ViewModel() {
 //    Перенести в конструктор
 //    @Inject
@@ -24,7 +25,7 @@ class MapsViewModel @Inject constructor( var injectionExample : InjectionExample
 //    @Inject
 //    lateinit var injectionExample : InjectionExample
 
-    private val repository = LocationRepository()
+//    private val repository = LocationRepository()
 
     private val TAG = "Location"
 
@@ -46,8 +47,8 @@ class MapsViewModel @Inject constructor( var injectionExample : InjectionExample
     private val setTrackLiveData = SingleLiveEvent<Any>()
 
     fun readLocation() {
-//        DaggerApplicationComponent.inject(this)
-        injectionExample.log()
+//        TODO delete
+//        injectionExample.log()
 
 
         repository.readLocationFromRepository().addOnCompleteListener(OnCompleteListener { task: Task<QuerySnapshot> ->
