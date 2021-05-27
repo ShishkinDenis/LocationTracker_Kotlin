@@ -1,5 +1,6 @@
 package com.shishkindenis.loginmodule.auth.emailAuth.viewModel
 
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
@@ -57,6 +58,10 @@ class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
     private fun goToApplicationModule() {
         applicationModuleLiveData.call()
     }
+
+//    private fun emailIsValid(): Boolean {
+//        return binding.etEmail.text.toString().isNotEmpty()
+//    }
 
 
 }

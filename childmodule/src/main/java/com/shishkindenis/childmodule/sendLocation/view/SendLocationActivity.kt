@@ -89,13 +89,35 @@ class SendLocationActivity : DaggerAppCompatActivity() {
         changeGpsStateIndicator()
         changeNetworkStateIndicator()
         startLocationDetermination()
+//TODO
 
-        sendLocationViewModel.toast.observe(this, Observer {
-            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
-        })
-        sendLocationViewModel.service.observe(this, Observer {
-            stopService()
-        })
+//        sendLocationViewModel.toast.observe(this, Observer {
+//            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+//        })
+//        sendLocationViewModel.service.observe(this, Observer {
+//            stopService()
+//        })
+
+//        with(sendLocationViewModel){
+//            toast.observe(this@SendLocationActivity, Observer {
+//                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+//            })
+//            service.observe(this@SendLocationActivity, Observer {
+//                stopService()
+//            })
+//        }
+        observeSendLocationViewModel()
+    }
+
+    private fun observeSendLocationViewModel(){
+        with(sendLocationViewModel){
+            toast.observe(this@SendLocationActivity, Observer {
+                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+            })
+            service.observe(this@SendLocationActivity, Observer {
+                stopService()
+            })
+        }
     }
 
     private fun checkIgnoringBatteryOptimizationsPermission() {

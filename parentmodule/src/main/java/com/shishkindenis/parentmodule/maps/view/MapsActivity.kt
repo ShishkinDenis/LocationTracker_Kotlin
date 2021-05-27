@@ -38,29 +38,60 @@ class MapsActivity : DaggerAppCompatActivity(), OnMapReadyCallback {
     private var time: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         val view: View = binding!!.root
         setContentView(view)
 
-        mapsViewModel.backToCalendarActivityWithCancelledResult.observe(this, Observer {
-            backToCalendarActivityWithCancelledResult()
-        })
-        mapsViewModel.backToCalendarActivityWithOkResult.observe(this, Observer {
-            backToCalendarActivityWithOkResult()
-        })
-        mapsViewModel.getPosition.observe(this, Observer {
-            getPosition(it as QueryDocumentSnapshot?)
-        })
-        mapsViewModel.setTrack.observe(this, Observer {
-            setTrack()
-        })
+//        with(mapsViewModel){
+//            backToCalendarActivityWithCancelledResult.observe(this@MapsActivity, Observer {
+//                backToCalendarActivityWithCancelledResult()
+//            })
+//            backToCalendarActivityWithOkResult.observe(this@MapsActivity, Observer {
+//                backToCalendarActivityWithOkResult()
+//            })
+//            getPosition.observe(this@MapsActivity, Observer {
+//                getPosition(it as QueryDocumentSnapshot?)
+//            })
+//            setTrack.observe(this@MapsActivity, Observer {
+//                setTrack()
+//            })
+//        }
+//        TODO
+//        mapsViewModel.backToCalendarActivityWithCancelledResult.observe(this, Observer {
+//            backToCalendarActivityWithCancelledResult()
+//        })
+//        mapsViewModel.backToCalendarActivityWithOkResult.observe(this, Observer {
+//            backToCalendarActivityWithOkResult()
+//        })
+//        mapsViewModel.getPosition.observe(this, Observer {
+//            getPosition(it as QueryDocumentSnapshot?)
+//        })
+//        mapsViewModel.setTrack.observe(this, Observer {
+//            setTrack()
+//        })
 
+        observeMapsViewModel()
         polylineOptions = PolylineOptions()
         mapsViewModel.readLocation()
         initMapsFragment()
+    }
+
+    private fun observeMapsViewModel(){
+        with(mapsViewModel){
+            backToCalendarActivityWithCancelledResult.observe(this@MapsActivity, Observer {
+                backToCalendarActivityWithCancelledResult()
+            })
+            backToCalendarActivityWithOkResult.observe(this@MapsActivity, Observer {
+                backToCalendarActivityWithOkResult()
+            })
+            getPosition.observe(this@MapsActivity, Observer {
+                getPosition(it as QueryDocumentSnapshot?)
+            })
+            setTrack.observe(this@MapsActivity, Observer {
+                setTrack()
+            })
+        }
     }
 
 

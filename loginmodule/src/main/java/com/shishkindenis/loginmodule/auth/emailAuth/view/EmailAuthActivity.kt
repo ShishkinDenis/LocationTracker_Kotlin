@@ -11,6 +11,7 @@ import com.shishkindenis.loginmodule.navigation.LoginNavigation
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
+
 class EmailAuthActivity : DaggerAppCompatActivity() {
 
     @Inject
@@ -28,31 +29,79 @@ class EmailAuthActivity : DaggerAppCompatActivity() {
         val view: View = binding.root
         setContentView(view)
 
-        binding.btnRegister.setOnClickListener {
-            if (emailIsValid() and passwordIsValid()) {
-                registerIfValid()
-            } else {
-                setErrorIfInvalid()
+//        TODO binding with
+        with(binding){
+            btnRegister.setOnClickListener {
+                if (emailIsValid() and passwordIsValid()) {
+                    registerIfValid()
+                } else {
+                    setErrorIfInvalid()
+                }
+            }
+            btnLogin.setOnClickListener {
+                if (emailIsValid() and passwordIsValid()) {
+                    logInIfValid()
+                } else {
+                    setErrorIfInvalid()
+                }
             }
         }
-        binding.btnLogin.setOnClickListener {
-            if (emailIsValid() and passwordIsValid()) {
-                logInIfValid()
-            } else {
-                setErrorIfInvalid()
-            }
-        }
-        emailAuthViewModel.toast.observe(this, Observer {
-            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
-        })
-        emailAuthViewModel.toastWithEmail.observe(this, Observer {
-            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
-        })
+//        binding.btnRegister.setOnClickListener {
+//            if (emailIsValid() and passwordIsValid()) {
+//                registerIfValid()
+//            } else {
+//                setErrorIfInvalid()
+//            }
+//        }
+//        binding.btnLogin.setOnClickListener {
+//            if (emailIsValid() and passwordIsValid()) {
+//                logInIfValid()
+//            } else {
+//                setErrorIfInvalid()
+//            }
+//        }
 
-        emailAuthViewModel.applicationModule.observe(this, Observer {
-            startActivity(navigation.getPostLoginActivity(this))
-            finish()
-        })
+
+//        TODO DELETE
+//        emailAuthViewModel.toast.observe(this, Observer {
+//            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+//        })
+//        emailAuthViewModel.toastWithEmail.observe(this, Observer {
+//            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+//        })
+//        emailAuthViewModel.applicationModule.observe(this, Observer {
+//            startActivity(navigation.getPostLoginActivity(this))
+//            finish()
+//        })
+
+//        with(emailAuthViewModel) {
+//            toast.observe(this@EmailAuthActivity, Observer {
+//                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+//            })
+//            toastWithEmail.observe(this@EmailAuthActivity, Observer {
+//                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+//            })
+//            applicationModule.observe(this@EmailAuthActivity, Observer {
+//                startActivity(navigation.getPostLoginActivity(this@EmailAuthActivity))
+//                finish()
+//            })
+//        }
+        observeEmailAuthViewModel()
+    }
+
+    private fun observeEmailAuthViewModel(){
+        with(emailAuthViewModel) {
+            toast.observe(this@EmailAuthActivity, Observer {
+                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+            })
+            toastWithEmail.observe(this@EmailAuthActivity, Observer {
+                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+            })
+            applicationModule.observe(this@EmailAuthActivity, Observer {
+                startActivity(navigation.getPostLoginActivity(this@EmailAuthActivity))
+                finish()
+            })
+        }
     }
 
     private fun emailIsValid(): Boolean {

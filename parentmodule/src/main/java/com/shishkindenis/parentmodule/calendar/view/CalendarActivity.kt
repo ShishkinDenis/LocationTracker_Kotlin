@@ -32,6 +32,7 @@ class CalendarActivity : DaggerAppCompatActivity() {
     private val MONTH = "Month"
     private val DAY = "Day"
     private val DATE_PATTERN = "yyyy-MM-dd"
+    private val START_ACTIVITY = 5
     private var date: String? = null
     private lateinit var binding: ActivityCalendarBinding
     private lateinit var calendar: Calendar
@@ -41,7 +42,6 @@ class CalendarActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar)
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         val calendarActivityView: View = binding!!.root
         setContentView(calendarActivityView)
@@ -52,19 +52,35 @@ class CalendarActivity : DaggerAppCompatActivity() {
             restoreChosenDate(savedInstanceState)
         } ?: showAlertDialog()
 
-        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            calendarYear = year
-            calendarMonth = month
-            calendarDay = dayOfMonth
-            calendar.let {
-                it.set(calendarYear, calendarMonth, calendarDay)
+        with(binding){
+            calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+                calendarYear = year
+                calendarMonth = month
+                calendarDay = dayOfMonth
+                calendar.let {
+                    it.set(calendarYear, calendarMonth, calendarDay)
+                }
+                val sdf = SimpleDateFormat(DATE_PATTERN)
+                date = sdf.format(calendar.time)
+                date?.let { Log.d("LOCATION", it) }
+                DateSingleton.setDate(date.toString())
             }
-            val sdf = SimpleDateFormat(DATE_PATTERN)
-            date = sdf.format(calendar.time)
-            date?.let { Log.d("LOCATION", it) }
-            DateSingleton.setDate(date.toString())
+            btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
         }
-        binding.btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
+//        TODO
+//        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+//            calendarYear = year
+//            calendarMonth = month
+//            calendarDay = dayOfMonth
+//            calendar.let {
+//                it.set(calendarYear, calendarMonth, calendarDay)
+//            }
+//            val sdf = SimpleDateFormat(DATE_PATTERN)
+//            date = sdf.format(calendar.time)
+//            date?.let { Log.d("LOCATION", it) }
+//            DateSingleton.setDate(date.toString())
+//        }
+//        binding.btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
 
         calendarViewModel.toast.observe(this, androidx.lifecycle.Observer {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
@@ -102,7 +118,7 @@ class CalendarActivity : DaggerAppCompatActivity() {
 
     private fun goToMapActivity() {
         val intent = Intent(this, MapsActivity::class.java)
-        startActivityForResult(intent, 5)
+        startActivityForResult(intent, START_ACTIVITY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

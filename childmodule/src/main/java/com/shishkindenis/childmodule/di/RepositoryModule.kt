@@ -1,8 +1,8 @@
 package com.shishkindenis.childmodule.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.shishkindenis.childmodule.sendLocation.data.ILocationRepository
 import com.shishkindenis.childmodule.sendLocation.data.LocationRepository
+import com.shishkindenis.childmodule.sendLocation.data.DefaultLocationRepository
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import dagger.Module
 import dagger.Provides
@@ -22,11 +22,11 @@ class RepositoryModule {
         return FirebaseUserSingleton
     }
 
-    var iRepository: ILocationRepository = LocationRepository(firestoreDataBase, FirebaseUserSingleton)
+    var repository: LocationRepository = DefaultLocationRepository(firestoreDataBase, FirebaseUserSingleton)
 
     @Provides
-    fun provideLocationRepository(): ILocationRepository {
-        return iRepository
+    fun provideLocationRepository(): LocationRepository {
+        return repository
     }
 
 }
