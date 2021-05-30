@@ -1,8 +1,8 @@
 package com.shishkindenis.childmodule.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.shishkindenis.childmodule.sendLocation.data.LocationRepository
 import com.shishkindenis.childmodule.sendLocation.data.DefaultLocationRepository
+import com.shishkindenis.childmodule.sendLocation.data.LocationRepository
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
 import dagger.Module
 import dagger.Provides

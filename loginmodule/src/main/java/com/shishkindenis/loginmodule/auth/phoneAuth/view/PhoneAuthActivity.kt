@@ -1,8 +1,8 @@
 package com.shishkindenis.loginmodule.auth.phoneAuth.view
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
@@ -26,102 +26,19 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPhoneAuthBinding.inflate(layoutInflater)
-        val view: View = binding.root
-        setContentView(view)
 
-//        TODO binding внутри
-        with(binding){
-            btnRequestCode.setOnClickListener {
-                binding.pbPhoneAuth.visibility = View.VISIBLE
-                if (phoneNumberIsValid()) {
-                    startPhoneNumberVerification(binding.etPhoneNumber.text.toString())
-                } else {
-                    setErrorIfInvalid()
-                }
-                binding.pbPhoneAuth.visibility = View.INVISIBLE
-            }
-            btnVerifyCode.setOnClickListener { v ->
-                binding.pbPhoneAuth.visibility = View.VISIBLE
-                if (codeIsValid()) {
-                    phoneAuthViewModel.verifyPhoneNumberWithCode(
-                        binding.etVerificationCode.text.toString())
-                } else {
-                    setErrorIfInvalid()
-                }
-                binding.pbPhoneAuth.visibility = View.INVISIBLE
-            }
-        }
-//        TODO
-//        binding.btnRequestCode.setOnClickListener {
-//            binding.pbPhoneAuth.visibility = View.VISIBLE
-//            if (phoneNumberIsValid()) {
-//                startPhoneNumberVerification(binding.etPhoneNumber.text.toString())
-//            } else {
-//                setErrorIfInvalid()
-//            }
-//            binding.pbPhoneAuth.visibility = View.INVISIBLE
-//        }
-//        binding.btnVerifyCode.setOnClickListener { v ->
-//            binding.pbPhoneAuth.visibility = View.VISIBLE
-//            if (codeIsValid()) {
-//                phoneAuthViewModel.verifyPhoneNumberWithCode(
-//                        binding.etVerificationCode.text.toString())
-//            } else {
-//                setErrorIfInvalid()
-//            }
-//            binding.pbPhoneAuth.visibility = View.INVISIBLE
-//        }
-//        TODO расположение CALLBACK
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_phone_auth)
+        binding.phoneAuthActivity = this
+        binding.lifecycleOwner = this
+        binding.phoneAuthViewModel = phoneAuthViewModel
         phoneAuthViewModel.phoneVerificationCallback()
-
-//        with(phoneAuthViewModel){
-//            toast.observe(this@PhoneAuthActivity, Observer {
-//                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
-//            })
-//            verifyButton.observe(this@PhoneAuthActivity, Observer {
-//                enableVerifyButton()
-//            })
-//            phoneNumberError.observe(this@PhoneAuthActivity, Observer {
-//                showInvalidPhoneNumberError()
-//            })
-//            applicationModule.observe(this@PhoneAuthActivity, Observer {
-//                startActivity(navigation.getPostLoginActivity(this@PhoneAuthActivity))
-//                finish()
-//            })
-//            code.observe(this@PhoneAuthActivity, Observer {
-//                showInvalidCodeError()
-//            })
-//        }
         observePhoneAuthViewModel()
-
-        //        TODO
-//        phoneAuthViewModel.phoneVerificationCallback()
-//        phoneAuthViewModel.toast.observe(this, Observer {
-//            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
-//        })
-//        phoneAuthViewModel.verifyButton.observe(this, Observer {
-//            enableVerifyButton()
-//        })
-//        phoneAuthViewModel.phoneNumberError.observe(this, Observer {
-//            showInvalidPhoneNumberError()
-//        })
-//        phoneAuthViewModel.applicationModule.observe(this, Observer {
-//            startActivity(navigation.getPostLoginActivity(this))
-//            finish()
-//        })
-//        phoneAuthViewModel.code.observe(this, Observer {
-//            showInvalidCodeError()
-//        })
     }
 
-    private fun observePhoneAuthViewModel(){
-        with(phoneAuthViewModel){
+    private fun observePhoneAuthViewModel() {
+        with(phoneAuthViewModel) {
             toast.observe(this@PhoneAuthActivity, Observer {
                 Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
-            })
-            verifyButton.observe(this@PhoneAuthActivity, Observer {
-                enableVerifyButton()
             })
             phoneNumberError.observe(this@PhoneAuthActivity, Observer {
                 showInvalidPhoneNumberError()
@@ -133,9 +50,16 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
             code.observe(this@PhoneAuthActivity, Observer {
                 showInvalidCodeError()
             })
+            phoneNumber.observe(this@PhoneAuthActivity, Observer {
+                startPhoneNumberVerification(it)
+            })
+            error.observe(this@PhoneAuthActivity, Observer {
+                setErrorIfInvalid()
+            })
         }
     }
 
+    //    Cannot move to viewModel because setActivity() requires Activity
     private fun startPhoneNumberVerification(phoneNumber: String) {
         val options = PhoneAuthOptions.newBuilder(FirebaseUserSingleton.getFirebaseAuth())
                 .setPhoneNumber(phoneNumber)
@@ -144,19 +68,6 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
                 .setCallbacks(phoneAuthViewModel.phoneVerificationCallback())
                 .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
-    }
-
-    private fun phoneNumberIsValid(): Boolean {
-        return binding.etPhoneNumber.text.toString().isNotEmpty()
-    }
-
-    private fun codeIsValid(): Boolean {
-        return binding.etVerificationCode.text.toString().isNotEmpty()
-    }
-
-//    TODO
-    private fun enableVerifyButton() {
-        binding.btnVerifyCode.isEnabled = true
     }
 
     private fun showInvalidPhoneNumberError() {
@@ -168,11 +79,12 @@ class PhoneAuthActivity : DaggerAppCompatActivity() {
     }
 
     private fun setErrorIfInvalid() {
-        if (!phoneNumberIsValid()) {
+        if (phoneAuthViewModel.phoneNumberIsValid()) {
             showInvalidPhoneNumberError()
         }
-        if (!codeIsValid()) {
+        if (phoneAuthViewModel.codeIsValid()) {
             showInvalidCodeError()
         }
     }
+
 }

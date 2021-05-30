@@ -1,71 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".auth.phoneAuth.view.PhoneAuthActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <EditText
-        android:id="@+id/etPhoneNumber"
+    <data>
+
+        <import type="com.shishkindenis.loginmodule.auth.phoneAuth.view.PhoneAuthActivity" />
+
+        <import type="com.shishkindenis.loginmodule.auth.phoneAuth.viewModel.PhoneAuthViewModel" />
+
+        <variable
+            name="phoneAuthActivity"
+            type="com.shishkindenis.loginmodule.auth.phoneAuth.view.PhoneAuthActivity" />
+
+        <variable
+            name="phoneAuthViewModel"
+            type="com.shishkindenis.loginmodule.auth.phoneAuth.viewModel.PhoneAuthViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/edit_text_margin_start"
-        android:layout_marginTop="@dimen/edit_text_margin_top_small"
-        android:layout_marginEnd="@dimen/edit_text_margin_end"
-        android:ems="10"
-        android:hint="@string/phone_number"
-        android:inputType="phone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        tools:context=".auth.phoneAuth.view.PhoneAuthActivity">
 
-    <EditText
-        android:id="@+id/etVerificationCode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/edit_text_margin_start"
-        android:layout_marginTop="@dimen/edit_text_margin_top_normal"
-        android:layout_marginEnd="@dimen/edit_text_margin_end"
-        android:ems="10"
-        android:hint="@string/verification_code"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/etPhoneNumber"
-        app:layout_constraintStart_toStartOf="@+id/etPhoneNumber"
-        app:layout_constraintTop_toBottomOf="@+id/etPhoneNumber" />
+        <EditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/edit_text_margin_start"
+            android:layout_marginTop="@dimen/edit_text_margin_top_small"
+            android:layout_marginEnd="@dimen/edit_text_margin_end"
+            android:ems="10"
+            android:hint="@string/phone_number"
+            android:inputType="phone"
+            android:text="@={phoneAuthViewModel.etPhoneNumber}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnVerifyCode"
-        android:layout_width="@dimen/button_width_landscape_orientation"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/button_margin_end"
-        android:layout_marginBottom="@dimen/button_margin_bottom_landscape"
-        android:enabled="false"
-        android:text="@string/verify_code"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <EditText
+            android:id="@+id/etVerificationCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/edit_text_margin_start"
+            android:layout_marginTop="@dimen/edit_text_margin_top_normal"
+            android:layout_marginEnd="@dimen/edit_text_margin_end"
+            android:ems="10"
+            android:hint="@string/verification_code"
+            android:inputType="number"
+            android:text="@={phoneAuthViewModel.etVerificationCode}"
+            app:layout_constraintEnd_toEndOf="@+id/etPhoneNumber"
+            app:layout_constraintStart_toStartOf="@+id/etPhoneNumber"
+            app:layout_constraintTop_toBottomOf="@+id/etPhoneNumber" />
 
-    <Button
-        android:id="@+id/btnRequestCode"
-        android:layout_width="@dimen/button_width_landscape_orientation"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/button_margin_start"
-        android:layout_marginBottom="@dimen/button_margin_bottom_landscape"
-        android:text="@string/request_code"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/btnVerifyCode"
+            progressBarVisibility="@{phoneAuthViewModel.progressBarIsShown}"
+            android:layout_width="@dimen/button_width_landscape_orientation"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/button_margin_end"
+            android:layout_marginBottom="@dimen/button_margin_bottom_landscape"
+            android:enabled="false"
+            android:onClick="@{() -> phoneAuthViewModel.verifyCode()}"
+            android:text="@string/verify_code"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:showIfCodeSent="@{phoneAuthViewModel.codeSent}" />
 
-    <ProgressBar
-        android:id="@+id/pbPhoneAuth"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/progress_bar_margin_top_normal"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/etVerificationCode"
-        app:layout_constraintHorizontal_bias="0.499"
-        app:layout_constraintStart_toStartOf="@+id/etVerificationCode"
-        app:layout_constraintTop_toBottomOf="@+id/etVerificationCode" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnRequestCode"
+            android:layout_width="@dimen/button_width_landscape_orientation"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/button_margin_start"
+            android:layout_marginBottom="@dimen/button_margin_bottom_landscape"
+            android:onClick="@{() -> phoneAuthViewModel.requestCode()}"
+            android:text="@string/request_code"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pbPhoneAuth"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/progress_bar_margin_top_normal"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/etVerificationCode"
+            app:layout_constraintHorizontal_bias="0.499"
+            app:layout_constraintStart_toStartOf="@+id/etVerificationCode"
+            app:layout_constraintTop_toBottomOf="@+id/etVerificationCode" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

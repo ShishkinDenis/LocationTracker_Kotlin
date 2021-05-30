@@ -2,8 +2,8 @@ package com.shishkindenis.parentmodule.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shishkindenis.loginmodule.singleton.FirebaseUserSingleton
-import com.shishkindenis.parentmodule.maps.data.LocationRepository
 import com.shishkindenis.parentmodule.maps.data.DefaultLocationRepository
+import com.shishkindenis.parentmodule.maps.data.LocationRepository
 import com.shishkindenis.parentmodule.singleton.DateSingleton
 import dagger.Module
 import dagger.Provides

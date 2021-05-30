@@ -4,24 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity"/>
+
+        <import type="com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity" />
+
         <variable
-            name = "mainLoginActivity"
-            type = "com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity"/>
+            name="mainLoginActivity"
+            type="com.shishkindenis.loginmodule.mainLogin.view.MainLoginActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".mainLogin.view.MainLoginActivity">
+        tools:context=".view.MainActivity">
 
         <Button
             android:id="@+id/btnEmail"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/button_margin_start_large"
             android:layout_marginTop="@dimen/button_margin_top_medium"
             android:layout_marginEnd="@dimen/button_margin_end"
+            android:onClick="@{() -> mainLoginActivity.goToEmailAuthActivity()}"
             android:text="@string/email"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/tvChooseTheWayOfSigning"
@@ -31,11 +35,13 @@
 
         <Button
             android:id="@+id/btnPhone"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/button_margin_start_large"
             android:layout_marginTop="@dimen/button_margin_top_normal"
             android:layout_marginEnd="@dimen/button_margin_end"
+            android:onClick="@{() -> mainLoginActivity.goToPhoneAuthActivity()}"
             android:text="@string/phone"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/btnEmail"

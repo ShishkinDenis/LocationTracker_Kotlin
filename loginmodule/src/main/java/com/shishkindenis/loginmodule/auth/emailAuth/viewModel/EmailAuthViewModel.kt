@@ -1,7 +1,9 @@
 package com.shishkindenis.loginmodule.auth.emailAuth.viewModel
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -11,6 +13,9 @@ import com.shishkindenis.loginmodule.util.SingleLiveEvent
 import javax.inject.Inject
 
 class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton: FirebaseUserSingleton) : ViewModel() {
+
+    var etEmail: String = ""
+    var etPassword: String = ""
 
     val toast: LiveData<Int>
         get() = toastLiveData
@@ -24,7 +29,14 @@ class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
         get() = applicationModuleLiveData
     private val applicationModuleLiveData = SingleLiveEvent<Any>()
 
-    fun createAccount(email: String, password: String?) {
+    val error: LiveData<Any>
+        get() = errorLiveData
+    private val errorLiveData = SingleLiveEvent<Any>()
+
+    private var _progressBarIsShown = MutableLiveData<Boolean>(false)
+    var progressBarIsShown: LiveData<Boolean> = _progressBarIsShown
+
+    private fun createAccount(email: String, password: String?) {
         firebaseUserSingleton.getFirebaseAuth()?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {
@@ -35,7 +47,7 @@ class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
                 }
     }
 
-    fun signIn(email: String, password: String) {
+    private fun signIn(email: String, password: String) {
         firebaseUserSingleton.getFirebaseAuth()?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {
@@ -59,9 +71,37 @@ class EmailAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
         applicationModuleLiveData.call()
     }
 
-//    private fun emailIsValid(): Boolean {
-//        return binding.etEmail.text.toString().isNotEmpty()
-//    }
+    private fun showError() {
+        errorLiveData.call()
+    }
 
+    fun emailIsValid(): Boolean {
+        return etEmail.isNotEmpty()
+    }
+
+    fun passwordIsValid(): Boolean {
+        return etPassword.isNotEmpty()
+    }
+
+    fun registerIfValid() {
+        _progressBarIsShown.value = true
+        if (emailIsValid() and passwordIsValid()) {
+            createAccount(etEmail, etPassword)
+        } else {
+            showError()
+        }
+        _progressBarIsShown.value = false
+    }
+
+    fun logInIfValid() {
+        Log.d("Email", "Email")
+        _progressBarIsShown.value = true
+        if (emailIsValid() and passwordIsValid()) {
+            signIn(etEmail, etPassword)
+        } else {
+            showError()
+        }
+        _progressBarIsShown.value = false
+    }
 
 }

@@ -52,7 +52,7 @@ class CalendarActivity : DaggerAppCompatActivity() {
             restoreChosenDate(savedInstanceState)
         } ?: showAlertDialog()
 
-        with(binding){
+        with(binding) {
             calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
                 calendarYear = year
                 calendarMonth = month
@@ -67,21 +67,6 @@ class CalendarActivity : DaggerAppCompatActivity() {
             }
             btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
         }
-//        TODO
-//        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-//            calendarYear = year
-//            calendarMonth = month
-//            calendarDay = dayOfMonth
-//            calendar.let {
-//                it.set(calendarYear, calendarMonth, calendarDay)
-//            }
-//            val sdf = SimpleDateFormat(DATE_PATTERN)
-//            date = sdf.format(calendar.time)
-//            date?.let { Log.d("LOCATION", it) }
-//            DateSingleton.setDate(date.toString())
-//        }
-//        binding.btnGoToMapFromCalendar.setOnClickListener { goToMapActivity() }
-
         calendarViewModel.toast.observe(this, androidx.lifecycle.Observer {
             Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
         })

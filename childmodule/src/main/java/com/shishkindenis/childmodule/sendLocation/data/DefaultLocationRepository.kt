@@ -10,7 +10,5 @@ class DefaultLocationRepository @Inject constructor(val firestoreDataBase: Fireb
     private var userId: String? = firebaseUserSingleton?.getFirebaseAuth()?.currentUser?.uid
 
     override fun addDataToRepository(locationMap: MutableMap<String, Any>) =
-//        TODO
-//        firestoreDataBase?.collection(userId!!)?.add(locationMap)
-        userId?.let { firestoreDataBase?.collection(it)?.add(locationMap) }
+            userId?.let { firestoreDataBase?.collection(it)?.add(locationMap) }
 }

@@ -1,6 +1,7 @@
 package com.shishkindenis.loginmodule.auth.phoneAuth.viewModel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
@@ -19,6 +20,8 @@ class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
     private var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
     private var phoneVerificationId: String? = null
     private var forceResendingToken: PhoneAuthProvider.ForceResendingToken? = null
+    var etPhoneNumber: String = ""
+    var etVerificationCode: String = ""
 
     val toast: LiveData<Int>
         get() = toastLiveData
@@ -32,13 +35,24 @@ class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
         get() = applicationModuleLiveData
     private val applicationModuleLiveData = SingleLiveEvent<Any>()
 
-    val verifyButton: LiveData<Any>
-        get() = verifyButtonLiveData
-    private val verifyButtonLiveData = SingleLiveEvent<Any>()
-
     val phoneNumberError: LiveData<Any>
         get() = phoneNumberErrorLiveData
     private val phoneNumberErrorLiveData = SingleLiveEvent<Any>()
+
+    val phoneNumber: LiveData<String>
+        get() = phoneNumberLiveData
+    private val phoneNumberLiveData = SingleLiveEvent<String>()
+
+    val error: LiveData<Any>
+        get() = errorLiveData
+    private val errorLiveData = SingleLiveEvent<Any>()
+
+    private var _codeSent = MutableLiveData<Boolean>(false)
+    var codeSent: LiveData<Boolean> = _codeSent
+
+    private var _progressBarIsShown = MutableLiveData<Boolean>(false)
+    var progressBarIsShown: LiveData<Boolean> = _progressBarIsShown
+
 
     fun phoneVerificationCallback(): PhoneAuthProvider.OnVerificationStateChangedCallbacks? {
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -59,7 +73,7 @@ class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
                     token: PhoneAuthProvider.ForceResendingToken) {
                 phoneVerificationId = verificationId
                 forceResendingToken = token
-                enableVerifyButton()
+                _codeSent.value = true
             }
         }
         return callbacks
@@ -80,17 +94,14 @@ class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
                 }
     }
 
-    fun verifyPhoneNumberWithCode(code: String?) {
+    //    TODO
+    private fun verifyPhoneNumberWithCode(code: String?) {
         val credential = PhoneAuthProvider.getCredential(phoneVerificationId!!, code!!)
         signInWithPhoneAuthCredential(credential)
     }
 
     fun showToast(toastMessage: Int) {
         toastLiveData.value = toastMessage
-    }
-
-    fun enableVerifyButton() {
-        verifyButtonLiveData.call()
     }
 
     fun showInvalidPhoneNumberError() {
@@ -103,6 +114,42 @@ class PhoneAuthViewModel @Inject constructor(var firebaseUserSingleton: Firebase
 
     private fun showInvalidCodeError() {
         codeLiveData.call()
+    }
+
+    private fun showError() {
+        errorLiveData.call()
+    }
+
+    private fun launchPhoneNumberVerification(phoneNumber: String) {
+        phoneNumberLiveData.value = phoneNumber
+    }
+
+    fun phoneNumberIsValid(): Boolean {
+        return etPhoneNumber.isNotEmpty()
+    }
+
+    fun codeIsValid(): Boolean {
+        return etVerificationCode.isNotEmpty()
+    }
+
+    fun requestCode() {
+        _progressBarIsShown.value = true
+        if (phoneNumberIsValid()) {
+            launchPhoneNumberVerification(etPhoneNumber)
+        } else {
+            showError()
+        }
+        _progressBarIsShown.value = false
+    }
+
+    fun verifyCode() {
+        _progressBarIsShown.value = true
+        if (codeIsValid()) {
+            verifyPhoneNumberWithCode(etVerificationCode)
+        } else {
+            showError()
+        }
+        _progressBarIsShown.value = false
     }
 
 }
